@@ -1,0 +1,42 @@
+.catalog {
+    margin-top: 10pc;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    align-items: center; /* Centra el contenido horizontalmente */
+}
+
+.catalogo-container {
+    display: flex;
+    margin: 20px; /* Espacio alrededor del contenedor del catálogo */
+    max-width: 1200px; /* Ajusta el ancho máximo del contenedor */
+    width: 100%;
+}
+
+.filterPM {
+    flex: 0 0 250px; /* Ajusta el ancho del contenedor del filtro */
+}
+
+.filterRP {
+    flex: 1; /* Ocupa el espacio restante */
+    margin-left: 20px; /* Espacio entre el filtro y los resultados */
+}
+
+h1 {
+    text-align: center;
+    margin: 20px 0;
+}
+
+/* Asegura que el navbar y footer tengan estilos consistentes */
+.navbar {
+    margin-bottom: 20px;
+}
+
+/* Opcional: añadir un borde y padding para mejorar la separación visual */
+.filterPM,
+.filterRP {
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+}
+ 

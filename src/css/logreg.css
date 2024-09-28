@@ -1,0 +1,142 @@
+/* logreg.css */
+
+.n {
+    font-family: Arial, sans-serif;
+    background-color: #f0f8ff; /* Color de fondo suave */
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Centrar verticalmente */
+    min-height: 100vh; /* Asegura que ocupe toda la altura de la ventana */
+    padding: 20px;
+    box-sizing: border-box; /* Asegura que el padding no afecte el ancho */
+}
+
+.form-container {
+    background-color: #ffffff;
+    padding: 40px; /* Espacio interior */
+    border-radius: 12px; /* Bordes redondeados */
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada */
+    width: 100%; /* Ancho del contenedor se adapta */
+    max-width: 450px; /* Ancho máximo aumentado a 450px */
+    text-align: center; /* Centrar contenido */
+    transition: transform 0.3s; /* Efecto al pasar el mouse */
+}
+
+.form-container:hover {
+    transform: translateY(-5px); /* Levanta el contenedor al pasar el mouse */
+}
+
+.logo {
+    display: block;
+    margin: 0 auto 20px; /* Centra la imagen */
+    max-width: 70%; /* Aumentar el tamaño de la imagen */
+    height: auto; /* Mantiene la proporción de la imagen */
+}
+
+h2 {
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 28px; /* Aumenta el tamaño de la fuente */
+    font-weight: 700; /* Grosor de la fuente */
+}
+
+.input-group {
+    margin-bottom: 20px; /* Mayor separación entre grupos */
+}
+
+.input-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #555; /* Color más suave */
+}
+
+.input-group input {
+    width: 100%;
+    padding: 14px; /* Aumenta el padding */
+    border: 2px solid #007bff; /* Bordes más gruesos y coloridos */
+    border-radius: 8px; /* Bordes redondeados */
+    box-sizing: border-box; /* Asegura que el padding no afecte el ancho */
+    transition: border-color 0.3s; /* Transición suave */
+}
+
+.input-group input:focus {
+    border-color: #0056b3; /* Color del borde al enfocar */
+    outline: none; /* Quita el contorno por defecto */
+}
+
+.btn {
+    width: 100%;
+    padding: 14px; /* Aumenta el padding */
+    background-color: #28a745; /* Color verde para el botón */
+    color: white;
+    border: none;
+    border-radius: 8px; /* Bordes redondeados */
+    cursor: pointer;
+    font-size: 20px; /* Aumenta el tamaño de la fuente */
+    font-weight: bold; /* Negrita en el texto */
+    transition: background-color 0.3s, transform 0.3s; /* Transiciones suaves */
+}
+
+.btn:hover {
+    background-color: #218838; /* Color más oscuro al pasar el mouse */
+    transform: translateY(-2px); /* Efecto de elevación */
+}
+
+.error {
+    color: red; /* Color del mensaje de error */
+    margin-top: 10px; /* Espacio superior */
+    font-weight: bold; /* Aumenta el grosor de la fuente */
+}
+
+p {
+    margin-top: 15px;
+    color: #666;
+}
+
+p a {
+    color: #007bff; /* Color del enlace */
+    text-decoration: none;
+    font-weight: bold; /* Negrita en el enlace */
+}
+
+p a:hover {
+    text-decoration: underline; /* Subrayar al pasar el mouse */
+}
+
+.terms {
+    margin-top: 10px; /* Espacio para el texto de términos */
+    font-size: 14px; /* Tamaño de fuente más pequeño */
+    color: #777; /* Color más suave */
+}
+.input-group {
+    margin-bottom: 20px; /* Espaciado entre campos */
+}
+
+.input-group label {
+    display: block; /* Asegúrate de que las etiquetas estén en bloque */
+    margin-bottom: 5px; /* Espaciado debajo de la etiqueta */
+}
+
+.password-input {
+    position: relative; /* Necesario para posicionar el ícono */
+}
+
+.password-input input {
+    width: 100%; /* Asegúrate de que el input ocupe todo el ancho */
+    padding-right: 30px; /* Espacio para el ícono */
+}
+
+.password-input span {
+    position: absolute; /* Posicionar el ícono dentro del input */
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer; /* Cambia el cursor al pasar sobre el ícono */
+}
+
+/* Estilos para placeholders */
+input::placeholder {
+    color: #888; /* Color del placeholder */
+    opacity: 1; /* Asegúrate de que el placeholder sea visible */
+}
