@@ -18,9 +18,7 @@ const minNav = () => {
                 <li className="itemnv2">
                     <Link to="#" className="tooltip-link tooltip-trigger">ILUMINACION</Link>   
                 </li>
-                <li className="itemnv2">
-                    <Link to="/about" className="tooltip-link tooltip-trigger">NOSOTROS</Link>   
-                </li>
+                
             </ul>
         </div>
     );

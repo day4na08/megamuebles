@@ -201,6 +201,24 @@ const NavBar = () => {
                                 <span className="link">Favoritos</span>
                             </Link>
                         </li>
+                        <li className="list"> 
+                            <Link to="/Tendencias" className="nav-link">
+                                <i className="bx bx-trending-up icon" />
+                                <span className="link">Tendencias</span>
+                            </Link>
+                        </li>
+                        <li className="list"> 
+                            <Link to="/SobreNosotros" className="nav-link">
+                                <i className="bx bx-group icon" />
+                                <span className="link">Sobre Nosotros</span>
+                            </Link>
+                        </li>
+                        <li className="list"> 
+                            <Link to="/Ubicanos" className="nav-link">
+                                <i className="bx bx-map icon" />
+                                <span className="link">Ubícanos</span>
+                            </Link>
+                        </li>
                     </ul>
                     <div className="bottom-cotent">
                         <ul className="lists">

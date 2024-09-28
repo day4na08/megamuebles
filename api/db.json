@@ -72,6 +72,68 @@
         }
       }
     }
-  ]
-
+    
+  ],
+  "productos": [
+    {
+      "id": "1",
+      "nombre": "Sillón Relax",
+      "imagen": "https://www.ahorrototal.com/3011180-home_default/sillon-relax-pushback-reclinable-boom-color-moka.jpg",
+      "unidades": 120
+    },
+    {
+      "id": "2",
+      "nombre": "Mesa de Comedor 4 puestos",
+      "imagen": "https://bodegadelmueble.com/wp-content/uploads/grecia-natural-700x467.jpg",
+      "unidades": 80
+    },
+    {
+      "id": "3",
+      "nombre": "Cama King Size",
+      "imagen": "https://http2.mlstatic.com/D_NQ_NP_853439-MCO76762720313_062024-O.webp",
+      "unidades": 60
+    }
+  ],
+"ventas": {
+    "categorias": [
+      {
+        "categoria": "Comedores 6 puestos",
+        "ventas": 150
+      },
+      {
+        "categoria": "Escritorios",
+        "ventas": 100
+      },
+      {
+        "categoria": " Base Camas",
+        "ventas": 90
+      }
+    ],
+    "ganancias": [
+      {
+        "mes": "Enero",
+        "ganancia": 23000000
+      },
+      {
+        "mes": "Febrero",
+        "ganancia": 12000000
+      },
+      {
+        "mes": "Marzo",
+        "ganancia": 3500000
+      },
+      {
+        "mes": "Abril",
+        "ganancia": 6000000
+      },
+      {
+        "mes": "Mayo",
+        "ganancia": 42000000
+      },
+      {
+        "mes": "Junio",
+        "ganancia": 8000000
+      }
+    ]
+  }
 }

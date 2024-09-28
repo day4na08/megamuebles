@@ -17,7 +17,9 @@ import AdminPage from "../pages/Admin.jsx";
 import UserPage from "../pages/User.jsx";
 import UserCartFavorites from "../components/UserCartFavorites.jsx";
 import About from '../components/About.jsx';
-import Spline from "@splinetool/react-spline";
+import Ubicanos from "../pages/Ubicanos.jsx";
+import Tendencias from "../pages/Tendencias.jsx";
+import SobreNosotros from "../pages/SobreNosotros.jsx";
 
 
 function App() {
@@ -41,6 +43,9 @@ function App() {
         <Route path="/user" element={<UserPage />} />
         <Route path="/UserCartFavorites" element={<UserCartFavorites/>} />
         <Route path="/about" element={<About />} />
+        <Route path="/SobreNosotros" element={<SobreNosotros />} />
+        <Route path="/Tendencias" element={<Tendencias />} />
+        <Route path="/Ubicanos" element={<Ubicanos />} />
 
 
 
