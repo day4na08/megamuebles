@@ -26,15 +26,12 @@ const NavBar = () => {
       const fetchProducts = async () => {
         try {
          await axios.get('http://localhost:3001/products');
-          // Maneja los productos si es necesario
         } catch (error) {
           console.error('Error fetching products:', error);
         }
       };
   
       fetchProducts();
-  
-      // Verifica el estado de la sesión
       const id = cookies.get('id');
       const role = cookies.get('role');
       if (id && role) {
@@ -118,7 +115,7 @@ const NavBar = () => {
                       <li className="list">
                         <div className="nav-link" onClick={handleAccountClick}>
                           <i className="bx bx-user-circle icon">
-                            <span className="link">Cuenta</span>
+                            <span className="link"> Cuenta</span>
                           </i>
                         </div>
                         {isDropdownOpen && (
@@ -131,8 +128,8 @@ const NavBar = () => {
                       </li>
                       <li className="list cart-icon">
                         <Link to="/Carrito" className="nav-link" onClick={toggleCart}>
-                          <i className="bx bxs-cart cart-icon icon" />
-                          <span>{cartCount}</span>
+                        <span><i className="bx bxs-cart cart-icon icon" />
+                          {cartCount}</span>
                         </Link>
                       </li>
                     </ul>
