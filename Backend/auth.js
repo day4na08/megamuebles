@@ -69,6 +69,24 @@ app.post('/login', (req, res) => {
     });
 });
 
+
+// Ruta para obtener los datos del usuario por ID
+app.get('/users/:id', (req, res) => {
+    const userId = req.params.id;
+
+    const query = 'SELECT * FROM Usuarios WHERE id = ?';
+    conexion.query(query, [userId], (err, results) => {
+        if (err) {
+            return res.status(500).send('Error al obtener los datos del usuario');
+        }
+        if (results.length > 0) {
+            res.json(results[0]);
+        } else {
+            res.status(404).send('Usuario no encontrado');
+        }
+    });
+});
+
 // Inicia el servidor
 const PORT = 3001;
 app.listen(PORT, () => {
