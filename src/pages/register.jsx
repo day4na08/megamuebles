@@ -36,42 +36,37 @@ class Register extends Component {
 
     handleSubmit = async (event) => {
         event.preventDefault(); 
-
+    
         const { password, verifyPassword } = this.state.form;
-
+    
         if (password.length < 8) {
             this.setState({ error: 'La contraseña debe tener al menos 8 caracteres.' });
             return;
         }
-
+    
         if (password !== verifyPassword) {
             this.setState({ error: 'Las contraseñas no coinciden.' });
             return;
         }
-
+    
         try {
-            const response = await axios.get(baseUrl, { params: { username: this.state.form.username } });
-
-            if (response.data.length > 0) {
-                this.setState({ error: 'El nombre de usuario ya está en uso.' });
-            } else {
-                const newUser = {
-                    username: this.state.form.username,
-                    apellido: this.state.form.apellido,
-                    email: this.state.form.email,
-                    password: md5(this.state.form.password),
-                    role: this.state.form.role
-                };
-
-                await axios.post(baseUrl, newUser);
-                this.setState({ success: true });
-                this.setState({ redirect: '/' }); 
-            }
+            const newUser = {
+                username: this.state.form.username,
+                apellido: this.state.form.apellido,
+                email: this.state.form.email,
+                password: this.state.form.password, // Ya no es necesario usar md5 aquí
+                role: this.state.form.role
+            };
+    
+            await axios.post('http://localhost:3001/register', newUser);
+            this.setState({ success: true });
+            this.setState({ redirect: '/' }); 
         } catch (error) {
             console.log(error);
             this.setState({ error: 'Error al intentar registrar el usuario' });
         }
     }
+        
 
     componentDidMount() {
 
