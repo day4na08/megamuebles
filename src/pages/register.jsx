@@ -16,8 +16,9 @@ class Register extends Component {
             username: '',
             apellido: '',
             email: '',
+            confirmEmail: '',
             password: '',
-            verifyPassword: '',
+            confirmPassword: '',
             role: 'user' 
         },
         error: '',
@@ -37,15 +38,20 @@ class Register extends Component {
     handleSubmit = async (event) => {
         event.preventDefault(); 
 
-        const { password, verifyPassword } = this.state.form;
+        const { email, confirmEmail, password, confirmPassword } = this.state.form;
 
         if (password.length < 8) {
             this.setState({ error: 'La contraseña debe tener al menos 8 caracteres.' });
             return;
         }
 
-        if (password !== verifyPassword) {
+        if (password !== confirmPassword) {
             this.setState({ error: 'Las contraseñas no coinciden.' });
+            return;
+        }
+
+        if (email !== confirmEmail) {
+            this.setState({ error: 'Los correos electrónicos no coinciden.' });
             return;
         }
 
@@ -74,7 +80,6 @@ class Register extends Component {
     }
 
     componentDidMount() {
-
         const role = cookies.get('role');
         if (role) {
             this.setState({
@@ -129,6 +134,17 @@ class Register extends Component {
                                 />
                             </div>
                             <div className="input-group">
+                                <label htmlFor="confirmEmail">Confirmar Correo Electrónico</label>
+                                <input
+                                    type="email"
+                                    id="confirmEmail"
+                                    name="confirmEmail"
+                                    value={this.state.form.confirmEmail}
+                                    onChange={this.handleChange}
+                                    required
+                                />
+                            </div>
+                            <div className="input-group">
                                 <label htmlFor="password">Contraseña</label>
                                 <input
                                     type="password"
@@ -140,12 +156,12 @@ class Register extends Component {
                                 />
                             </div>
                             <div className="input-group">
-                                <label htmlFor="verifyPassword">Verificar Contraseña</label>
+                                <label htmlFor="confirmPassword">Confirmar Contraseña</label>
                                 <input
                                     type="password"
-                                    id="verifyPassword"
-                                    name="verifyPassword"
-                                    value={this.state.form.verifyPassword}
+                                    id="confirmPassword"
+                                    name="confirmPassword"
+                                    value={this.state.form.confirmPassword}
                                     onChange={this.handleChange}
                                     required
                                 />
