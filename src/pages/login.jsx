@@ -41,44 +41,34 @@ class Login extends Component {
 
     iniciarSesion = async (event) => {
         event.preventDefault();
-
+    
         try {
-            const response = await axios.get(baseUrl, {
-                params: {
-                    email: this.state.form.email,
-                    password: md5(this.state.form.password)
-                }
+            const response = await axios.post('http://localhost:3001/login', {
+                email: this.state.form.email,
+                password: this.state.form.password
             });
-
-            const usuarios = response.data;
-            const usuario = usuarios.find(u => 
-                (u.email === this.state.form.email || u.correo === this.state.form.email) &&
-                (u.password === md5(this.state.form.password) || u.contraseña === md5(this.state.form.password))
-            );
-
-            if (usuario) {
-                cookies.set('id', usuario.id, { path: "/" });
-                cookies.set('username', usuario.username, { path: "/" });
-                cookies.set('email', usuario.email || usuario.correo, { path: "/" });
-                cookies.set('role', usuario.role || usuario.role, { path: "/" });
-
-                localStorage.setItem('userId', usuario.id.toString());
-
-                let redirectPath = '/user'; 
-                if (usuario.role === 'admin') {
-                    redirectPath = '/admin'; 
-                }
-
-                this.setState({ isAuthenticated: true, redirect: redirectPath, userRole: usuario.role });
-            } else {
-                this.setState({ error: 'Correo electrónico o contraseña incorrectos' });
+    
+            const usuario = response.data;
+    
+            cookies.set('id', usuario.id, { path: "/" });
+            cookies.set('username', usuario.username, { path: "/" });
+            cookies.set('email', usuario.email, { path: "/" });
+            cookies.set('role', usuario.role, { path: "/" });
+    
+            localStorage.setItem('userId', usuario.id.toString());
+    
+            let redirectPath = '/user'; 
+            if (usuario.role === 'admin') {
+                redirectPath = '/admin'; 
             }
+    
+            this.setState({ isAuthenticated: true, redirect: redirectPath, userRole: usuario.role });
         } catch (error) {
             console.error('Error al intentar iniciar sesión:', error);
-            this.setState({ error: 'Error al intentar iniciar sesión' });
+            this.setState({ error: 'Correo electrónico o contraseña incorrectos' });
         }
     }
-
+    
     render() {
         if (this.state.isAuthenticated && this.state.redirect) {
             return <Navigate to={this.state.redirect} />;

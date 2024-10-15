@@ -1,0 +1,139 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "username": "admin123",
+      "apellido": "perez",
+      "email": "admin123@gmail.com",
+      "contraseña": "25d55ad283aa400af464c76d713c07ad",
+      "role": "admin"
+    },
+    {
+      "id": "229d",
+      "username": "santiago",
+      "apellido": "delgado",
+      "email": "santiago@gmail.com",
+      "password": "25d55ad283aa400af464c76d713c07ad",
+      "role": "user"
+    }
+  ],
+  "products": [
+    {
+      "id": "679d",
+      "name": "producto base ",
+      "material": "madera triplex",
+      "estilo": "Contemporáneo",
+      "tela": "Cuero",
+      "acabado": "Aceite",
+      "color": "Madera",
+      "tapizMaterial": "Tela",
+      "materialInterno": "Espuma",
+      "precio": 100000,
+      "descripcion": "los productos se agrega desde el menu mi cuenta en el navbar",
+      "requiereArmado": "no",
+      "alto": "120",
+      "ancho": "300",
+      "profundidad": "300",
+      "pesoNeto": "30",
+      "autor": "admin123",
+      "cantidad": 231321313,
+      "imagenes": {
+        "imagen1": "",
+        "imagen2": "",
+        "imagen3": "",
+        "imagen4": "",
+        "imagen5": ""
+      },
+      "userId": 1
+    }
+  ],
+  "purchases": [
+    {
+      "id": "6e50",
+      "user": {
+        "IdUser": "229d",
+        "nombre": "santiago",
+        "email": "santiago@gmail.com",
+        "telefono": "21312312",
+        "direccion": "3213213131",
+        "ciudad": "bogota",
+        "codigoPostal": "3121321",
+        "tarjeta": "231312",
+        "vencimiento": "321321321",
+        "cvv": "321321"
+      },
+      "products": {
+        "product1": {
+          "productId": "679d",
+          "cantidad": 8,
+          "precio": 100000,
+          "userId": 1,
+          "autor": "admin123"
+        }
+      }
+    }
+    
+  ],
+  "productos": [
+    {
+      "id": "1",
+      "nombre": "Sillón Relax",
+      "imagen": "https://www.ahorrototal.com/3011180-home_default/sillon-relax-pushback-reclinable-boom-color-moka.jpg",
+      "unidades": 120
+    },
+    {
+      "id": "2",
+      "nombre": "Mesa de Comedor 4 puestos",
+      "imagen": "https://bodegadelmueble.com/wp-content/uploads/grecia-natural-700x467.jpg",
+      "unidades": 80
+    },
+    {
+      "id": "3",
+      "nombre": "Cama King Size",
+      "imagen": "https://http2.mlstatic.com/D_NQ_NP_853439-MCO76762720313_062024-O.webp",
+      "unidades": 60
+    }
+  ],
+"ventas": {
+    "categorias": [
+      {
+        "categoria": "Comedores 6 puestos",
+        "ventas": 150
+      },
+      {
+        "categoria": "Escritorios",
+        "ventas": 100
+      },
+      {
+        "categoria": " Base Camas",
+        "ventas": 90
+      }
+    ],
+    "ganancias": [
+      {
+        "mes": "Enero",
+        "ganancia": 23000000
+      },
+      {
+        "mes": "Febrero",
+        "ganancia": 12000000
+      },
+      {
+        "mes": "Marzo",
+        "ganancia": 3500000
+      },
+      {
+        "mes": "Abril",
+        "ganancia": 6000000
+      },
+      {
+        "mes": "Mayo",
+        "ganancia": 42000000
+      },
+      {
+        "mes": "Junio",
+        "ganancia": 8000000
+      }
+    ]
+  }
+}

@@ -8,12 +8,13 @@ import '../css/Navbar.css';
 import AccountDropdown from './user/AccountDropdown';
 import { CartContext } from './CartContext'; // Asegúrate de que esta ruta sea correcta
 import LogoutButton from './user/LogoutButton';
-import UserCartFavorites from './UserCartFavorites';
+
 
 
 const cookies = new Cookies();
 
 const NavBar = () => {
+  
     const { cartCount } = useContext(CartContext); // Obtenemos la cantidad de productos en el carrito
     const [isNavOpen, setIsNavOpen] = useState(false);
     const [isCartOpen, setIsCartOpen] = useState(false);
@@ -21,27 +22,63 @@ const NavBar = () => {
     const [userRole, setUserRole] = useState('');
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const navigate = useNavigate();
+    const [userData, setUserData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null); // Estado para manejar errores
+
+    const userId = localStorage.getItem('userId'); // Obtener el userId de localStorage
+
   
     useEffect(() => {
+      const fetchUserData = async () => {
+        if (!userId) {
+            setError('No se encontró el ID de usuario.');
+            setLoading(false);
+            return;
+        }
+
+        try {
+            const response = await axios.get(`http://localhost:3001/users/${userId}`);
+            setUserData(response.data);
+        } catch (error) {
+            console.error('Error al obtener los datos del usuario:', error);
+            setError('Hubo un problema al obtener los datos del usuario.'); // Guardar el error en el estado
+        } finally {
+            setLoading(false);
+        }
+    };
+
       const fetchProducts = async () => {
         try {
          await axios.get('http://localhost:3001/products');
-          // Maneja los productos si es necesario
         } catch (error) {
           console.error('Error fetching products:', error);
         }
       };
   
       fetchProducts();
-  
-      // Verifica el estado de la sesión
       const id = cookies.get('id');
       const role = cookies.get('role');
       if (id && role) {
         setIsLoggedIn(true);
         setUserRole(role);
       }
-    }, []);
+      fetchUserData();
+    },[userId]);
+    
+    // Manejo de estados de carga, error y datos
+    if (loading) {
+        return <p>Cargando...</p>; // Mensaje de carga
+    }
+
+    if (error) {
+        return <p>{error}</p>; // Mensaje de error
+    }
+
+    if (!userData) {
+        return <p>No se encontraron datos de usuario.</p>; // Manejo si no hay datos
+    }
+ ;
   
     const toggleNav = () => setIsNavOpen(!isNavOpen);
     const toggleCart = () => setIsCartOpen(!isCartOpen);
@@ -116,23 +153,32 @@ const NavBar = () => {
                             </Link>
                         </li>
                       <li className="list">
-                        <div className="nav-link" onClick={handleAccountClick}>
-                          <i className="bx bx-user-circle icon">
-                            <span className="link">Cuenta</span>
-                          </i>
-                        </div>
-                        {isDropdownOpen && (
-                          <AccountDropdown 
-                            isLoggedIn={isLoggedIn} 
-                            userRole={userRole} 
-                            onLogout={handleLogout}
-                          />
-                        )}
+                      {isLoggedIn ? (
+                                <div className="nav-link" onClick={handleAccountClick}>
+                                    <i className="bx bx-user-circle icon">
+                                        <span className="link"> {userData.username}</span>
+                                    </i>
+                                    {isDropdownOpen && (
+                                        <AccountDropdown 
+                                            isLoggedIn={isLoggedIn} 
+                                            userRole={userRole} 
+                                            onLogout={handleLogout}
+                                        />
+                                    )}
+                                </div>
+                            ) : (
+                                <Link className="nav-link" to="/Login">
+                                    <i className="bx bx-user-circle icon">
+                                        <span className="link"> Iniciar Sesión</span>
+                                    </i>
+                                </Link>
+                            )}
+
                       </li>
                       <li className="list cart-icon">
                         <Link to="/Carrito" className="nav-link" onClick={toggleCart}>
-                          <i className="bx bxs-cart cart-icon icon" />
-                          <span>{cartCount}</span>
+                        <span><i className="bx bxs-cart cart-icon icon" />
+                          {cartCount}</span>
                         </Link>
                       </li>
                     </ul>
@@ -184,7 +230,7 @@ const NavBar = () => {
                             {isLoggedIn ? (
                               <div className="nav-link" onClick={handleAccountRedirect}>
                                 <i className="bx bx-user-circle icon">
-                                  <span className="link"> Cuenta</span>
+                                  <span className="link"> Tu Cuenta</span>
                                 </i>
                               </div>
                             ) : (
