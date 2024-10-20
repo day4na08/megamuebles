@@ -36,13 +36,11 @@ const NavBar = () => {
             setLoading(false);
             return;
         }
-
         try {
             const response = await axios.get(`http://localhost:3001/users/${userId}`);
             setUserData(response.data);
         } catch (error) {
-            console.error('Error al obtener los datos del usuario:', error);
-            setError('Hubo un problema al obtener los datos del usuario.'); // Guardar el error en el estado
+            setError('Hay un problema al iniciar la base de datos, escribir ( node auth.js  ) en carpeta Backend en la terminal del proyecto:)'); // Guardar el error en el estado
         } finally {
             setLoading(false);
         }
@@ -64,8 +62,8 @@ const NavBar = () => {
         setUserRole(role);
       }
       fetchUserData();
-    },[userId]);
-    
+    },[userId]);    
+
     // Manejo de estados de carga, error y datos
     if (loading) {
         return <p>Cargando...</p>; // Mensaje de carga
@@ -153,26 +151,28 @@ const NavBar = () => {
                             </Link>
                         </li>
                       <li className="list">
-                      {isLoggedIn ? (
-                                <div className="nav-link" onClick={handleAccountClick}>
-                                    <i className="bx bx-user-circle icon">
-                                        <span className="link"> {userData.username}</span>
-                                    </i>
-                                    {isDropdownOpen && (
-                                        <AccountDropdown 
-                                            isLoggedIn={isLoggedIn} 
-                                            userRole={userRole} 
-                                            onLogout={handleLogout}
-                                        />
-                                    )}
-                                </div>
-                            ) : (
-                                <Link className="nav-link" to="/Login">
-                                    <i className="bx bx-user-circle icon">
-                                        <span className="link"> Iniciar Sesión</span>
-                                    </i>
-                                </Link>
-                            )}
+                        {isLoggedIn ? (
+                        <div className="nav-link" onClick={handleAccountClick}>
+                          <i className="bx bx-user-circle icon">
+                            <span className="link">
+                              {userData && userData.username ? userData.username : 'Usuario'}
+                            </span>
+                          </i>
+                          {isDropdownOpen && (
+                            <AccountDropdown
+                              isLoggedIn={isLoggedIn}
+                              userRole={userRole}
+                              onLogout={handleLogout}
+                            />
+                          )}
+                        </div>
+                      ) : (
+                        <Link className="nav-link" to="/Login">
+                          <i className="bx bx-user-circle icon">
+                            <span className="link"> Iniciar Sesión</span>
+                          </i>
+                        </Link>
+                      )}
 
                       </li>
                       <li className="list cart-icon">

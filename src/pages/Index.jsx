@@ -237,10 +237,29 @@ function Index() {
           
         </div>
         <div>
-        <Spline scene= "https://prod.spline.design/UBNcBEkIPDAB0DoJ/scene.splinecode"/>
+      { /* <Spline scene= "https://prod.spline.design/UBNcBEkIPDAB0DoJ/scene.splinecode"/>*/}
       </div>
 
         
+      <div class="vtex-flex-layout-200-x-flexRow--3d-objects">
+      <h2>modelo Sketchfab C:</h2>
+
+      <iframe
+          title="d"
+          width="1340"
+          height="680"
+          src="https://sketchfab.com/models/08e7d7b0e95f46439dda4a7009fde3b2/embed"
+          frameborder="2000"
+          allow="autoplay; fullscreen; vr"
+          allowfullscreen
+          mozallowfullscreen="true"
+          webkitallowfullscreen="true"
+          onmousewheel=""
+      ></iframe>
+
+      <h2>modelo spline esta comentado en el codigo c: </h2>
+
+      </div>
 
         <CatalogoIndex style={{ marginBottom: '40px' }} /> {/* Espacio adicional entre el catálogo y la imagen */}
 
