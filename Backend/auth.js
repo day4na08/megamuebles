@@ -86,6 +86,33 @@ app.get('/users/:id', (req, res) => {
         }
     });
 });
+//agregar muebles
+app.post('/api/productos', (req, res) => {
+    const { name, material, estilo, precio, cantidad, descripcion } = req.body;
+    const userId = req.user.id;  // Obtenido del usuario autenticado
+    const username = req.user.username; // Obtenido del usuario autenticado
+
+    const nuevoProducto = {
+        name,
+        material,
+        estilo,
+        precio,
+        cantidad,
+        descripcion,
+        autor: username,  // El username del usuario
+        userId: userId,   // El id del usuario
+        imagen1: req.body.imagen1,
+        imagen2: req.body.imagen2,
+        imagen3: req.body.imagen3,
+        imagen4: req.body.imagen4,
+        imagen5: req.body.imagen5
+    };
+
+    conexion.query('INSERT INTO Productos SET ?', nuevoProducto, (err, result) => {
+        if (err) throw err;
+        res.send('Producto agregado con éxito');
+    });
+});
 
 // Inicia el servidor
 const PORT = 3001;
