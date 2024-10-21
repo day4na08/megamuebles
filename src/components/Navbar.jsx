@@ -32,7 +32,7 @@ const NavBar = () => {
     useEffect(() => {
       const fetchUserData = async () => {
         if (!userId) {
-            setError('No se encontró el ID de usuario.');
+            setError('Hay un problema al iniciar la base de datos, escribir ( node auth.js  ) en carpeta Backend en la terminal del proyecto:)');
             setLoading(false);
             return;
         }
