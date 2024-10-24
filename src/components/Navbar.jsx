@@ -9,8 +9,6 @@ import AccountDropdown from './user/AccountDropdown';
 import { CartContext } from './CartContext'; // Asegúrate de que esta ruta sea correcta
 import LogoutButton from './user/LogoutButton';
 
-
-
 const cookies = new Cookies();
 
 const NavBar = () => {
@@ -28,90 +26,76 @@ const NavBar = () => {
 
     const userId = localStorage.getItem('userId'); // Obtener el userId de localStorage
 
-  
     useEffect(() => {
-      const fetchUserData = async () => {
-        if (!userId) {
-            setError('Hay un problema al iniciar la base de datos, escribir ( node auth.js  ) en carpeta Backend en la terminal del proyecto:)');
-            setLoading(false);
-            return;
+        const fetchUserData = async () => {
+            try {
+                const response = await axios.get(`http://localhost:3001/users/${userId}`);
+                setUserData(response.data); // Almacena los datos del usuario
+            } catch (error) {
+                setError('Error al obtener datos del usuario'); // Mensaje de error personalizado
+                console.error('Error fetching user data:', error);
+            }
+        };
+      
+        const fetchProducts = async () => {
+            try {
+                await axios.get('http://localhost:3001/products');
+            } catch (error) {
+                setError('Error al obtener productos');
+                console.error('Error fetching products:', error);
+            }
+        };
+      
+        fetchProducts();
+        
+        // Solo ejecuta la solicitud si existe un userId
+        if (userId) {
+            fetchUserData();
         }
-        try {
-            const response = await axios.get(`http://localhost:3001/users/${userId}`);
-            setUserData(response.data);
-        } catch (error) {
-            setError('Hay un problema al iniciar la base de datos, escribir ( node auth.js  ) en carpeta Backend en la terminal del proyecto:)'); // Guardar el error en el estado
-        } finally {
-            setLoading(false);
+        
+        const id = cookies.get('id');
+        const role = cookies.get('role');
+        if (id && role) {
+            setIsLoggedIn(true);
+            setUserRole(role);
         }
-    };
+    }, [userId]);
 
-      const fetchProducts = async () => {
-        try {
-         await axios.get('http://localhost:3001/products');
-        } catch (error) {
-          console.error('Error fetching products:', error);
-        }
-      };
-  
-      fetchProducts();
-      const id = cookies.get('id');
-      const role = cookies.get('role');
-      if (id && role) {
-        setIsLoggedIn(true);
-        setUserRole(role);
-      }
-      fetchUserData();
-    },[userId]);    
-
-    // Manejo de estados de carga, error y datos
-    if (loading) {
-        return <p>Cargando...</p>; // Mensaje de carga
-    }
-
-    if (error) {
-        return <p>{error}</p>; // Mensaje de error
-    }
-
-    if (!userData) {
-        return <p>No se encontraron datos de usuario.</p>; // Manejo si no hay datos
-    }
- ;
-  
     const toggleNav = () => setIsNavOpen(!isNavOpen);
     const toggleCart = () => setIsCartOpen(!isCartOpen);
     const closeOverlay = () => {
-      setIsNavOpen(false);
-      setIsCartOpen(false);
+        setIsNavOpen(false);
+        setIsCartOpen(false);
     };
-  
+
     const handleAccountClick = () => {
-      setIsDropdownOpen(!isDropdownOpen);
+        setIsDropdownOpen(!isDropdownOpen);
     };
+
     const handleAccountRedirect = () => {
-      navigate('/user'); // Redirige a la página de cuenta del usuario
+        navigate('/user'); // Redirige a la página de cuenta del usuario
     };
-  
+
     const handleLogout = () => {
-      // Limpia las cookies
-      cookies.remove('id', { path: '/' });
-      cookies.remove('username', { path: '/' });
-      cookies.remove('email', { path: '/' });
-      cookies.remove('role', { path: '/' });
-  
-      // Actualiza el estado
-      setIsLoggedIn(false);
-      setUserRole('');
-  
-      // Cierra el dropdown
-      setIsDropdownOpen(false);
-  
-      // Redirige a la página de inicio
-      navigate('/');
+        // Limpia las cookies
+        cookies.remove('id', { path: '/' });
+        cookies.remove('username', { path: '/' });
+        cookies.remove('email', { path: '/' });
+        cookies.remove('role', { path: '/' });
+
+        // Actualiza el estado
+        setIsLoggedIn(false);
+        setUserRole('');
+
+        // Cierra el dropdown
+        setIsDropdownOpen(false);
+
+        // Redirige a la página de inicio
+        navigate('/');
     };
-  
+
     return (
-        <>
+<>
         <nav className={isNavOpen ? 'open' : ''}>
             <div className="container">
                 <div className="nav-wrapper">
