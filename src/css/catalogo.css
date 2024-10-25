@@ -1,14 +1,16 @@
 .catalog {
-    margin-top: 10pc;
+    margin-top: 7pc;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    align-items: center; /* Centra el contenido horizontalmente */
+    padding-left: 50px; /* Añade un pequeño espacio desde el borde izquierdo */
+    align-items: flex-start; /* Alinea los elementos hacia la izquierda */
+    
 }
 
 .catalogo-container {
     display: flex;
-    margin: 20px; /* Espacio alrededor del contenedor del catálogo */
+    margin: 10px 100px; /* Espacio alrededor del contenedor del catálogo */
     max-width: 1200px; /* Ajusta el ancho máximo del contenedor */
     width: 100%;
 }
@@ -24,7 +26,8 @@
 
 h1 {
     text-align: center;
-    margin: 20px 0;
+    margin: 90px 600px;
+    padding-left: 178px; /* Añade un pequeño espacio desde el borde izquierdo */
 }
 
 /* Asegura que el navbar y footer tengan estilos consistentes */
@@ -32,11 +35,3 @@ h1 {
     margin-bottom: 20px;
 }
 
-/* Opcional: añadir un borde y padding para mejorar la separación visual */
-.filterPM,
-.filterRP {
-    border: 1px solid #ddd;
-    padding: 20px;
-    border-radius: 8px;
-}
- 
