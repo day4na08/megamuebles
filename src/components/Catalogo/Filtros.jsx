@@ -82,8 +82,58 @@ function Filtros({ filtros, setFiltros }) {
           onChange={handleChange}
         />
       </label>
+    <style jsx>{`
+        .filtros-container {
+          display: flex;
+          flex-direction: column;
+          padding: 40px;
+          width: 380px; /* Ancho ajustado */
+          background-color: #ffffff; /* Fondo más claro */
+          border-right: 1px solid #ddd; /* Borde sutil */
+          max-height: 80vh; /* Altura máxima ajustada */
+          overflow-y: auto; /* Scroll para contenido largo */
+          position: relative; /* Cambiado de fixed a relative */
+          left: 15px; /* Separado del borde izquierdo */
+          top: 1px; /* Separado del top para más espacio */
+          box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+        }
+
+        .filtros-container h3 {
+          margin-bottom: 20px;
+          font-size: 1.4em;
+          color: #333; /* Texto más oscuro */
+        }
+
+        .filtros-container label {
+          margin-bottom: 10 px;
+          display: flex;
+          flex-direction: column;
+          font-size: 14px; /* Tamaño de texto */
+          color: #555; /* Color de texto */
+        }
+
+        .filtros-container select,
+        .filtros-container input {
+          margin-top: 5px;
+          padding: 10px;
+          border: 1px solid #ccc; /* Borde más claro */
+          border-radius: 6px; /* Bordes más redondeados */
+          width: 100%; /* Usar todo el ancho disponible */
+          font-size: 14px; /* Tamaño de texto */
+          background-color: #f9f9f9; /* Fondo más claro */
+          box-sizing: border-box; /* Asegura que padding y borde se consideren en el ancho */
+        }
+
+        .filtros-container select:focus,
+        .filtros-container input:focus {
+          border-color: #007bff; /* Color del borde al hacer foco */
+          outline: none; /* Sin borde adicional */
+          box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Efecto de sombra al foco */
+        }
+      `}</style>
     </div>
   );
 }
 
 export default Filtros;
+
