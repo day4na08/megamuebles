@@ -20,12 +20,12 @@ const CheckoutForm = ({ onPurchaseComplete }) => {
         cvv: ''
     });
     const [loading, setLoading] = useState(false);
+    const [cardError, setCardError] = useState('');
+    const [cvvError, setCvvError] = useState('');
 
     useEffect(() => {
-        // Verificar si hay un usuario logueado
         const userId = cookies.get('id');
         if (userId) {
-            // Obtener los datos del usuario logueado
             axios.get(`http://localhost:3001/users/${userId}`)
                 .then(response => {
                     const user = response.data;
@@ -33,10 +33,10 @@ const CheckoutForm = ({ onPurchaseComplete }) => {
                         IdUser: user.id,
                         nombre: `${user.username}`,
                         email: user.email,
-                        telefono: user.telefonos?.telefono1 || '', // Asignar primer teléfono
+                        telefono: user.telefonos?.telefono1 || '',
                         direccion: user.direcciones?.direccion1 || '',
-                        ciudad: '', // Puedes agregar esta info si está en la API
-                        codigoPostal: '', // Puedes agregar esta info si está en la API
+                        ciudad: '',
+                        codigoPostal: '',
                         tarjeta: user.tarjetasDeCredito?.tarjeta1?.numero || '',
                         vencimiento: user.tarjetasDeCredito?.tarjeta1?.fechaVencimiento || '',
                         cvv: user.tarjetasDeCredito?.tarjeta1?.codigoSeguridad || ''
@@ -53,76 +53,108 @@ const CheckoutForm = ({ onPurchaseComplete }) => {
             ...userData,
             [e.target.name]: e.target.value
         });
+        setCardError(''); // Limpiar el error de tarjeta al cambiar el valor
+        setCvvError(''); // Limpiar el error de CVV al cambiar el valor
+    };
+
+    const validateCard = (cardNumber) => {
+        const cleaned = cardNumber.replace(/\D/g, '');
+        if (cleaned.length < 13 || cleaned.length > 19) {
+            return 'El número de tarjeta debe tener entre 13 y 19 dígitos.';
+        }
+        if (!/^\d+$/.test(cleaned)) {
+            return 'El número de tarjeta solo debe contener dígitos.';
+        }
+        return '';
+    };
+
+    const validateCvv = (cvv) => {
+        const cleaned = cvv.replace(/\D/g, '');
+        if (cleaned.length !== 3) {
+            return 'El CVV debe tener exactamente 3 dígitos.';
+        }
+        return '';
     };
 
     const handleSubmit = async (e) => {
-      e.preventDefault();
-      setLoading(true);
-  
-      try {
-          if (cartItems.length === 0) {
-              alert('El carrito está vacío. Por favor, agrega productos antes de comprar.');
-              setLoading(false);
-              return;
-          }
-  
-          // Verificar cantidades disponibles
-          for (let item of cartItems) {
-              const response = await axios.get(`http://localhost:3001/products/${item.id}`);
-              const productoApi = response.data;
-              if (item.quantity > productoApi.cantidad) {
-                  alert(`No hay suficientes unidades de ${item.nombre}. Quedan ${productoApi.cantidad} unidades disponibles.`);
-                  setLoading(false);
-                  return;
-              }
-          }
-  
-          // Preparar datos de compra con formato requerido
-          const productsData = await Promise.all(cartItems.map(async (item, index) => {
-              const response = await axios.get(`http://localhost:3001/products/${item.id}`);
-              const productoApi = response.data;
-              return {
-                  [`product${index + 1}`]: {
-                      productId: item.id,
-                      nombre: productoApi.nombre,
-                      cantidad: item.quantity,
-                      precio: productoApi.precio,
-                      userId: productoApi.userId,
-                      autor: productoApi.autor
-                  }
-              };
-          }));
-  
-          const purchaseData = {
-              user: userData,
-              products: Object.assign({}, ...productsData) // Convert array of objects into a single object
-          };
-  
-          // Enviar datos de compra a la API
-          await axios.post('http://localhost:3001/purchases', purchaseData);
-  
-          // Actualizar cantidad de productos
-          await Promise.all(cartItems.map(async (item) => {
-              const response = await axios.get(`http://localhost:3001/products/${item.id}`);
-              const productoApi = response.data;
-              const productoActualizado = {
-                  ...productoApi,
-                  cantidad: productoApi.cantidad - item.quantity
-              };
-              await axios.put(`http://localhost:3001/products/${item.id}`, productoActualizado);
-          }));
-  
-          alert('Compra realizada con éxito');
-          setCartItems([]); // Vaciar el carrito
-          onPurchaseComplete(purchaseData); // Pasar datos de compra a HistoryBuy
-      } catch (error) {
-          console.error('Error al realizar la compra:', error.response ? error.response.data : error.message);
-          alert('Hubo un error al completar la compra. Verifica la consola para más detalles.');
-      } finally {
-          setLoading(false);
-      }
-  };
-  
+        e.preventDefault();
+        setLoading(true);
+
+        // Validar tarjeta y CVV antes de continuar
+        const cardValidationError = validateCard(userData.tarjeta);
+        const cvvValidationError = validateCvv(userData.cvv);
+        
+        if (cardValidationError) {
+            setCardError(cardValidationError);
+            setLoading(false);
+            return;
+        }
+        if (cvvValidationError) {
+            setCvvError(cvvValidationError);
+            setLoading(false);
+            return;
+        }
+
+        try {
+            if (cartItems.length === 0) {
+                alert('El carrito está vacío. Por favor, agrega productos antes de comprar.');
+                setLoading(false);
+                return;
+            }
+
+            for (let item of cartItems) {
+                const response = await axios.get(`http://localhost:3001/products/${item.id}`);
+                const productoApi = response.data;
+                if (item.quantity > productoApi.cantidad) {
+                    alert(`No hay suficientes unidades de ${item.nombre}. Quedan ${productoApi.cantidad} unidades disponibles.`);
+                    setLoading(false);
+                    return;
+                }
+            }
+
+            const productsData = await Promise.all(cartItems.map(async (item, index) => {
+                const response = await axios.get(`http://localhost:3001/products/${item.id}`);
+                const productoApi = response.data;
+                return {
+                    [`product${index + 1}`]: {
+                        productId: item.id,
+                        nombre: productoApi.nombre,
+                        cantidad: item.quantity,
+                        precio: productoApi.precio,
+                        userId: productoApi.userId,
+                        autor: productoApi.autor
+                    }
+                };
+            }));
+
+            const purchaseData = {
+                user: userData,
+                products: Object.assign({}, ...productsData)
+            };
+
+            await axios.post('http://localhost:3001/purchases', purchaseData);
+
+            await Promise.all(cartItems.map(async (item) => {
+                const response = await axios.get(`http://localhost:3001/products/${item.id}`);
+                const productoApi = response.data;
+                const productoActualizado = {
+                    ...productoApi,
+                    cantidad: productoApi.cantidad - item.quantity
+                };
+                await axios.put(`http://localhost:3001/products/${item.id}`, productoActualizado);
+            }));
+
+            alert('Compra realizada con éxito');
+            setCartItems([]);
+            onPurchaseComplete(purchaseData);
+        } catch (error) {
+            console.error('Error al realizar la compra:', error.response ? error.response.data : error.message);
+            alert('Hubo un error al completar la compra. Verifica la consola para más detalles.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <form className="checkout-form" onSubmit={handleSubmit} autoComplete="off">
             <h2>Detalles de la Compra</h2>
@@ -158,7 +190,7 @@ const CheckoutForm = ({ onPurchaseComplete }) => {
                     placeholder="Su número de teléfono"
                     required
                 />
-                </div>
+            </div>
             <div className="form-group">
                 <label>Ciudad:</label>
                 <input
@@ -201,7 +233,10 @@ const CheckoutForm = ({ onPurchaseComplete }) => {
                     onChange={handleChange}
                     placeholder="Número de la tarjeta"
                     required
+                    pattern="\d*" // Acepta solo dígitos
+                    onInput={(e) => e.target.value = e.target.value.replace(/\D/g, '')} // Evita escribir letras
                 />
+                {cardError && <div className="error">{cardError}</div>} {/* Mensaje de error de tarjeta */}
             </div>
             <div className="form-group">
                 <label>Fecha de Vencimiento:</label>
@@ -223,7 +258,10 @@ const CheckoutForm = ({ onPurchaseComplete }) => {
                     onChange={handleChange}
                     placeholder="Código CVV"
                     required
+                    maxLength={3} // Máximo 3 dígitos
+                    onInput={(e) => e.target.value = e.target.value.replace(/\D/g, '')} // Evita escribir letras
                 />
+                {cvvError && <div className="error">{cvvError}</div>} {/* Mensaje de error de CVV */}
             </div>
             <button type="submit" className="submit-btn" disabled={loading}>
                 {loading ? 'Procesando...' : 'Confirmar Compra'}
@@ -233,3 +271,7 @@ const CheckoutForm = ({ onPurchaseComplete }) => {
 };
 
 export default CheckoutForm;
+
+   
+
+  

@@ -1,66 +1,70 @@
-/* filtros.css */
+  .filtros-container {
+    display: flex;
+    flex-direction: column;
+    padding: 40px;
+    width: 320px; /* Ancho ajustado */
+    background-color: #ffffff; /* Fondo más claro */
+    border-right: 1px solid #ddd; /* Borde sutil */
+    height: 80vh; /* Altura completa */
+    overflow-y: auto; /* Scroll para contenido largo */
+    position: fixed; /* Fijo en la izquierda */
+    left: 0; /* Pegado a la izquierda */
+    top: 70px; /* Pegado al top de la página */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+  }
 
-.filtros-container {
-  flex-direction: column;
-  padding: 20px;
-  width: 250px; /* Ajusta el ancho según tus necesidades */
-  background-color: #f5f5f5; /* Color de fondo opcional */
-  border-right: 1px solid #f5f5f5; /* Borde derecho opcional */
-  height: 100vh; /* Para que ocupe toda la altura de la pantalla */
-  overflow-y: auto; /* Permite scroll si el contenido es más largo que la altura */
-}
+  .filtros-container h3 {
+    margin-bottom: 15px;
+    font-size: 1.4em;
+    color: #333; /* Texto más oscuro */
+  }
 
-.filtros-container h3 {
-  margin-bottom: 20px;
-  font-size: 1.5em;
-}
+  .filtros-container label {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    font-size: 14px; /* Tamaño de texto */
+    color: #555; /* Color de texto */
+  }
 
-.filtros-container label {
-  margin-bottom: 15px;
-  display: flex;
-  flex-direction: column;
-}
+  .filtros-container select,
+  .filtros-container input {
+    margin-top: 5px;
+    padding: 10px;
+    border: 1px solid #ccc; /* Borde más claro */
+    border-radius: 6px; /* Bordes más redondeados */
+    width: 100%; /* Usar todo el ancho disponible */
+    font-size: 14px; /* Tamaño de texto */
+    background-color: #f9f9f9; /* Fondo más claro */
+    box-sizing: border-box; /* Asegura que padding y borde se consideren en el ancho */
+  }
 
-.filtros-container select,
-.filtros-container input {
-  margin-top: 5px;
-  padding: 8px;
-  border: 1px solid #f5f5f5;
-  border-radius: 4px;
-  
-}
+  .filtros-container i {
+    margin-right: 2px;
+  }
 
-.filtros-container i {
-  margin-right: 10px;
-}
+  .filtros-container .filtrom {
+    width: 100%; /* Ancho total */
+  }
 
-.filtrom {
-  width: calc(100% - 16px); /* Ajusta el ancho del input */
-}
+  .filtros-container select:focus,
+  .filtros-container input:focus {
+    border-color: #007bff; /* Color del borde al hacer foco */
+    outline: none; /* Sin borde adicional */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Efecto de sombra al foco */
+  }
 
-.filtros-container {
-  margin-bottom: 15px; /* Reduce el margen inferior */
-  display: flex;
-}
+  .filtros-container button {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #007bff; /* Color del botón */
+    color: #fff; /* Texto blanco */
+    border: none;
+    border-radius: 6px; /* Bordes redondeados */
+    cursor: pointer;
+    font-size: 14px;
+  }
 
-.filtros-container label {
-  display: block;
-  margin-bottom: 8px; /* Reduce el margen inferior de las etiquetas */
-  font-size: 14px; /* Tamaño de fuente más pequeño */
-  color: #333; /* Color de texto más sutil */
-}
-
-.filtros-container select,
-.filtros-container input {
-  border-radius: 5px; /* Bordes más suaves */
-  padding: 6px; /* Relleno más pequeño */
-  width: 180px; /* Ancho más pequeño */
-  margin-top: 3px; /* Margen superior reducido */
-  margin-right: 15px; /* Margen derecho reducido */
-  border: 1px solid #f5f5f5; /* Borde más sutil */
-  font-size: 14px; /* Tamaño de fuente más pequeño */
-}
-
-input.filtrom {
-  border-radius: 5px; /* Bordes más suaves */
-}
+  .filtros-container button:hover {
+    background-color: #0056b3; /* Oscurecer al hacer hover */
+  }
