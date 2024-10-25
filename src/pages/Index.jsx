@@ -237,9 +237,8 @@ function Index() {
           
         </div>
         <div>
-      { /* <Spline scene= "https://prod.spline.design/UBNcBEkIPDAB0DoJ/scene.splinecode"/>*/}
-      </div>
-
+      <Spline scene= "https://prod.spline.design/UBNcBEkIPDAB0DoJ/scene.splinecode"/>
+        </div>
         <CatalogoIndex style={{ marginBottom: '40px' }} /> {/* Espacio adicional entre el catálogo y la imagen */}
 
         {/* Imagen de Presentación con enlace */}

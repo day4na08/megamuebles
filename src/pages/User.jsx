@@ -32,12 +32,8 @@ const UserPage = () => {
         return <UserProfile />;
       case 'cards':
         return <CreditCardTable />;
-      case 'ventas':
-        return <Ventas />;
         case 'compras':
           return <Compras />;
-      case 'products':
-        return <ProductCrud />;
       default:
         return <UserProfile />;
     }

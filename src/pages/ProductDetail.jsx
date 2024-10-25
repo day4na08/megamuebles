@@ -119,7 +119,7 @@ const ProductDetail = () => {
             <p><strong>Categoría:</strong> {producto.categoria}</p>
             <div className="d-flex align-items-center mb-3">
               <button className="btn btn-primary me-2" onClick={handleAddToCart}>Agregar al carrito</button>
-              <div className="input-group" style={{ width: '120px' }}>
+              <div className="input-group" style={{ width: '180px', padding:'10px'}}>
                 <button
                   className="btn btn-outline-secondary"
                   onClick={() => setCantidad(Math.max(cantidad - 1, 1))}
@@ -184,10 +184,10 @@ const ProductDetail = () => {
           </div>
         </div>
 
-        <h2>Productos Similares</h2>
+        {/* <h2>Productos Similares</h2>
         <div className="row">
           {productosSimilares.map((simil, index) => (
-            <div key={index} className="col-md-3 mb-3">
+            <div key={index} className="col-md-50 mb-20">
               <div className="card">
                 <img src={simil.imagenes.imagen1} className="card-img-top" alt={simil.name} />
                 <div className="card-body">
@@ -198,7 +198,7 @@ const ProductDetail = () => {
               </div>
             </div>
           ))}
-        </div>
+        </div> */}
       </div>
       <Footer />
     </>

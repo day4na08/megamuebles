@@ -130,9 +130,9 @@ const NavBar = () => {
                   
                     <ul className="list_nav">
                         <li className="list">
-                            <Link to="#" className="nav-link">
+                            {/* <Link to="#" className="nav-link">
                                 <i className='bx bx-bell icon'></i>
-                            </Link>
+                            </Link> */}
                         </li>
                       <li className="list">
                         {isLoggedIn ? (
@@ -227,10 +227,10 @@ const NavBar = () => {
                             )}
                           </li>
                         <li className="list">
-                            <Link to="/UserCartFavorites" className="nav-link">
+                            {/* <Link to="/UserCartFavorites" className="nav-link">
                                 <i className='bx bx-heart icon'></i>
                                 <span className="link">Favoritos</span>
-                            </Link>
+                            </Link> */}
                         </li>
                         <li className="list"> 
                             <Link to="/Tendencias" className="nav-link">

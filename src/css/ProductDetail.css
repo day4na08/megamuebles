@@ -45,14 +45,22 @@
 .btn-group .btn {
     border-radius: 20px;
 }
+.input-group {
+    display: flex; /* Use flexbox to align items */
+    align-items: center; /* Center align items vertically */
+    width: 120px; /* Keep the same width for the input group */
+}
 
 .input-group .form-control {
     border-radius: 20px;
+    height: 38px; /* Ensure the input height matches the buttons */
 }
 
 .input-group .btn {
     border-radius: 20px;
+    height: 38px; /* Ensure the button height matches the input */
 }
+
 
 .my-4 {
     margin-top: 2rem !important;
