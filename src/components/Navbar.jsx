@@ -151,11 +151,18 @@ const NavBar = () => {
                           )}
                         </div>
                       ) : (
-                        <Link className="nav-link" to="/Login">
+                        <div className="nav-link" onClick={handleAccountClick}>
                           <i className="bx bx-user-circle icon">
                             <span className="link"> Iniciar Sesión</span>
                           </i>
-                        </Link>
+                          {isDropdownOpen && (
+                            <AccountDropdown
+                              isLoggedIn={isLoggedIn}
+                              userRole={userRole}
+                              onLogout={handleLogout}
+                            />
+                          )}
+                        </div>
                       )}
 
                       </li>
