@@ -116,11 +116,11 @@
       "autor": "admin123",
       "cantidad": 20,
       "imagenes": {
-        "imagen1": "https://i.ibb.co/rwFbQth/mueble7.jpg",
-        "imagen2": "",
-        "imagen3": "",
-        "imagen4": "",
-        "model3D": ""
+        "imagen1": "https://tugocolombia.vtexassets.com/arquivos/ids/301768-800-auto?v=638609810755330000&width=800&height=auto&aspect=true",
+        "imagen2": "https://tugocolombia.vtexassets.com/arquivos/ids/301770-800-auto?v=638609810766270000&width=800&height=auto&aspect=true",
+        "imagen3": "https://tugocolombia.vtexassets.com/arquivos/ids/301771-800-auto?v=638609810770430000&width=800&height=auto&aspect=true",
+        "imagen4": "https://tugocolombia.vtexassets.com/arquivos/ids/301774-800-auto?v=638609810785870000&width=800&height=auto&aspect=true",
+        "model3D": "1a15815a1420498681a5888ddbd0652b"
       },
       "userId": 1
     },
