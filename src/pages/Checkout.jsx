@@ -20,7 +20,8 @@ const CheckoutForm = ({ onPurchaseComplete }) => {
         cvv: ''
     });
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
+    const [cardError, setCardError] = useState('');
+    const [cvvError, setCvvError] = useState('');
 
     useEffect(() => {
         const userId = cookies.get('id');
@@ -52,7 +53,8 @@ const CheckoutForm = ({ onPurchaseComplete }) => {
             ...userData,
             [e.target.name]: e.target.value
         });
-        setError(''); // Limpiar el error al cambiar el valor
+        setCardError(''); // Limpiar el error de tarjeta al cambiar el valor
+        setCvvError(''); // Limpiar el error de CVV al cambiar el valor
     };
 
     const validateCard = (cardNumber) => {
@@ -79,15 +81,16 @@ const CheckoutForm = ({ onPurchaseComplete }) => {
         setLoading(true);
 
         // Validar tarjeta y CVV antes de continuar
-        const cardError = validateCard(userData.tarjeta);
-        const cvvError = validateCvv(userData.cvv);
-        if (cardError) {
-            setError(cardError);
+        const cardValidationError = validateCard(userData.tarjeta);
+        const cvvValidationError = validateCvv(userData.cvv);
+        
+        if (cardValidationError) {
+            setCardError(cardValidationError);
             setLoading(false);
             return;
         }
-        if (cvvError) {
-            setError(cvvError);
+        if (cvvValidationError) {
+            setCvvError(cvvValidationError);
             setLoading(false);
             return;
         }
@@ -233,7 +236,7 @@ const CheckoutForm = ({ onPurchaseComplete }) => {
                     pattern="\d*" // Acepta solo dígitos
                     onInput={(e) => e.target.value = e.target.value.replace(/\D/g, '')} // Evita escribir letras
                 />
-                {error && <div className="error">{error}</div>} {/* Mensaje de error */}
+                {cardError && <div className="error">{cardError}</div>} {/* Mensaje de error de tarjeta */}
             </div>
             <div className="form-group">
                 <label>Fecha de Vencimiento:</label>
@@ -258,7 +261,7 @@ const CheckoutForm = ({ onPurchaseComplete }) => {
                     maxLength={3} // Máximo 3 dígitos
                     onInput={(e) => e.target.value = e.target.value.replace(/\D/g, '')} // Evita escribir letras
                 />
-                {error && <div className="error">{error}</div>} {/* Mensaje de error */}
+                {cvvError && <div className="error">{cvvError}</div>} {/* Mensaje de error de CVV */}
             </div>
             <button type="submit" className="submit-btn" disabled={loading}>
                 {loading ? 'Procesando...' : 'Confirmar Compra'}
@@ -269,3 +272,6 @@ const CheckoutForm = ({ onPurchaseComplete }) => {
 
 export default CheckoutForm;
 
+   
+
+  
