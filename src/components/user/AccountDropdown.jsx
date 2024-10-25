@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import '../../css/AccountDropdown.css'; // Asegúrate de tener los estilos necesarios
 
-const AccountDropdown = ({ isLoggedIn, userRole, onLogout }) => {
+const AccountDropdown = ({ isLoggedIn, userRole }) => {
   return (
     <div className="account-dropdown">
       {isLoggedIn ? (
@@ -10,9 +10,7 @@ const AccountDropdown = ({ isLoggedIn, userRole, onLogout }) => {
           <li>
             <Link to={userRole === 'admin' ? '/admin' : '/user'}>Mi Cuenta</Link>
           </li>
-          <li>
-            <Link to="/login" onClick={onLogout}>Cerrar Sesión</Link>
-          </li>
+          {/* Se ha eliminado la opción de "Cerrar Sesión" */}
         </ul>
       ) : (
         <ul>
@@ -20,7 +18,7 @@ const AccountDropdown = ({ isLoggedIn, userRole, onLogout }) => {
             <Link to="/Login">Iniciar Sesión</Link>
           </li>
           <li>
-            <Link to="/Register ">Registrarse</Link>
+            <Link to="/Register">Registrarse</Link>
           </li>
         </ul>
       )}
