@@ -4,7 +4,7 @@ import axios from 'axios';
 import { CartContext } from '../components/CartContext.jsx';
 import NavBar from '../components/Navbar';
 import Footer from '../components/Footer';
-import '../css/ProductDetail.css'
+import '../css/ProductDetail.css';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -17,10 +17,8 @@ const ProductDetail = () => {
   const [activeSection, setActiveSection] = useState('descripcion');
   const [selectedImage, setSelectedImage] = useState('');
 
-  // Datos del modelo de Sketchfab
   const sketchfabModel = {
     title: "Modelo Sketchfab",
-    // Usa el ID del modelo 3D directamente
     iframeSrc: `https://sketchfab.com/models/${producto?.imagenes?.model3D}/embed`
   };
 
@@ -94,7 +92,7 @@ const ProductDetail = () => {
             </div>
             <div className="mt-2 d-flex">
               {Object.values(producto.imagenes || {})
-                .filter((img, index) => index < 4) // Asegúrate de mostrar solo hasta 4 imágenes
+                .filter((img, index) => index < 4)
                 .map((img, index) => (
                   <img
                     key={index}
@@ -108,7 +106,7 @@ const ProductDetail = () => {
               <div
                 className="img-thumbnail me-2"
                 style={{ width: '100px', cursor: 'pointer' }}
-                onClick={() => setSelectedImage('')} // Cambia a iframe
+                onClick={() => setSelectedImage('')}
               >
                 <h6>___3D___</h6>
               </div>
@@ -154,7 +152,9 @@ const ProductDetail = () => {
               <div>
                 <h3>{producto.name}</h3>
                 <table className="table">
-                  <thead><tr><th>Campo</th><th>Valor</th></tr></thead>
+                  <thead>
+                    <tr><th>Campo</th><th>Valor</th></tr>
+                  </thead>
                   <tbody>
                     <tr><td>Estilo</td><td>{producto.estilo}</td></tr>
                     <tr><td>Peso Neto</td><td>{producto.pesoNeto}</td></tr>
@@ -170,38 +170,35 @@ const ProductDetail = () => {
               </div>
             )}
             {activeSection === 'garantia' && (
-              <div><h2>Garantía</h2><p>La Garantía Estándar de Nuestros Productos es de dos Años.</p></div>
+              <div>
+                <h2>Garantía</h2>
+                <p>La Garantía Estándar de Nuestros Productos es de dos Años.</p>
+              </div>
             )}
             {activeSection === 'tips' && (
-              <div><h2>TIPS de Cuidado</h2><p>Consejos para el cuidado del producto.</p></div>
+              <div>
+                <h2>TIPS de Cuidado</h2>
+                <p>Mantén tus muebles limpios y libres de polvo.</p>
+              </div>
             )}
           </div>
         </div>
 
-        <div className="my-2">
-  <h2>Más Productos Similares</h2>
-  <div className="row g-2"> {/* Cambié g-4 a g-2 para reducir el espaciado entre las columnas */}
-    {productosSimilares.map((prod) => (
-      <div key={prod.id} className="col-md-10 mb-7"> {/* Cambié a col-md-4 y mb-2 para reducir el margen inferior */}
-        <div className="card h-300 border-0 shadow-sm text-center">
-          <img
-            src={prod.imagenes?.imagen1}
-            className="card-img-top"
-            alt={prod.name}
-            style={{ objectFit: 'cover', height: '200px' }} // Mantengo la altura de la imagen
-          />
-          <div className="card-body d-flex flex-column justify-content-center align-items-center">
-            <h5 className="card-title">{prod.name}</h5>
-            <p className="card-text">${prod.precio.toFixed(2)}</p>
-            <Link to={`/productDetail/${prod.id}`} className="btn btn-outline-primary">Ver más</Link>
-          </div>
+        <h2>Productos Similares</h2>
+        <div className="row">
+          {productosSimilares.map((simil, index) => (
+            <div key={index} className="col-md-3 mb-3">
+              <div className="card">
+                <img src={simil.imagenes.imagen1} className="card-img-top" alt={simil.name} />
+                <div className="card-body">
+                  <h5 className="card-title">{simil.name}</h5>
+                  <p className="card-text">Precio: ${simil.precio.toFixed(2)}</p>
+                  <Link to={`/product/${simil.id}`} className="btn btn-primary">Ver Detalles</Link>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
-      </div>
-    ))}
-  </div>
-</div>
-
-
       </div>
       <Footer />
     </>
