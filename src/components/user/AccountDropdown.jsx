@@ -1,17 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../../css/AccountDropdown.css'; // Asegúrate de tener los estilos necesarios
+import '../../css/AccountDropdown.css';
 
 const AccountDropdown = ({ isLoggedIn, userRole }) => {
   return (
     <div className="account-dropdown">
       {isLoggedIn ? (
+      <div>
         <ul>
           <li>
             <Link to={userRole === 'admin' ? '/admin' : '/user'}>Mi Cuenta</Link>
           </li>
-          {/* Se ha eliminado la opción de "Cerrar Sesión" */}
         </ul>
+        </div>
       ) : (
         <ul>
           <li>

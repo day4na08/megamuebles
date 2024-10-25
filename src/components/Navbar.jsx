@@ -136,19 +136,13 @@ const NavBar = () => {
                         </li>
                       <li className="list">
                         {isLoggedIn ? (
-                        <div className="nav-link" onClick={handleAccountClick}>
+                        <div className="nav-link"  onClick={handleAccountRedirect}>
                           <i className="bx bx-user-circle icon">
                             <span className="link">
                               {userData && userData.username ? userData.username : 'Usuario'}
                             </span>
                           </i>
-                          {isDropdownOpen && (
-                            <AccountDropdown
-                              isLoggedIn={isLoggedIn}
-                              userRole={userRole}
-                              onLogout={handleLogout}
-                            />
-                          )}
+                          
                         </div>
                       ) : (
                         <div className="nav-link" onClick={handleAccountClick}>
