@@ -1,61 +1,168 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Modal, Button, Form } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../css/UserProfile.css';
+import '../css/UserProfile.css'
 
 function UserProfile() {
-    const [userData, setUserData] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null); // Estado para manejar errores
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [newPhone, setNewPhone] = useState('');
+  const [editMode, setEditMode] = useState({ type: null, index: null });
+  const [showEditModal, setShowEditModal] = useState(false);
 
-    const userId = localStorage.getItem('userId'); // Obtener el userId de localStorage
+  useEffect(() => {
+    const fetchUserData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+          throw new Error('No se encontró ID de usuario');
+        }
 
-    useEffect(() => {
-        const fetchUserData = async () => {
-            if (!userId) {
-                setError('No se encontró el ID de usuario.');
-                setLoading(false);
-                return;
-            }
-    
-            try {
-                const response = await axios.get(`http://localhost:3001/users/${userId}`);
-                setUserData(response.data);
-            } catch (error) {
-                console.error('Error al obtener los datos del usuario:', error);
-                setError('Hubo un problema al obtener los datos del usuario.'); // Guardar el error en el estado
-            } finally {
-                setLoading(false);
-            }
-        };
-    
-        fetchUserData();
-    }, [userId]);
-    
-    // Manejo de estados de carga, error y datos
-    if (loading) {
-        return <p>Cargando...</p>; // Mensaje de carga
+        const response = await axios.get(`http://localhost:3001/users/${userId}`);
+        const data = response.data;
+
+        if (!data) {
+          throw new Error('No se encontraron datos del usuario');
+        }
+
+        setUserData({
+          ...data,
+          tarjetasDeCredito: data.tarjetasDeCredito || [],
+          telefonos: data.telefonos || {}
+        });
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  const handleSaveChanges = async (updatedData) => {
+    try {
+      const userId = localStorage.getItem('userId');
+      if (!userId) {
+        throw new Error('No se encontró ID de usuario');
+      }
+      await axios.put(`http://localhost:3001/users/${userId}`, updatedData);
+      setUserData(updatedData);
+      alert('Datos actualizados exitosamente');
+    } catch (error) {
+      console.error("Error al actualizar los datos:", error);
+      alert('Hubo un problema al actualizar los datos. Por favor, inténtelo de nuevo.');
+    }
+  };
+
+  const handleAddPhone = () => {
+    if (!newPhone) {
+      alert('Por favor, ingrese un número de teléfono.');
+      return;
     }
 
-    if (error) {
-        return <p>{error}</p>; // Mensaje de error
-    }
+    const phoneKey = `telefono${Object.keys(userData.telefonos).length + 1}`;
+    const updatedPhones = { ...userData.telefonos, [phoneKey]: newPhone };
+    handleSaveChanges({ ...userData, telefonos: updatedPhones });
 
-    if (!userData) {
-        return <p>No se encontraron datos de usuario.</p>; // Manejo si no hay datos
-    }
+    setNewPhone('');
+    setShowEditModal(false);
+  };
 
-    return (
-        <div className="container">
-            <h2>Bienvenido, ¡{userData.username}!</h2>
-            <h4>¿Qué necesitas hoy?</h4>
-            <p>Apellido: {userData.apellido}</p>
-            <p>Email: {userData.email}</p>
-            <hr />
-            <h3>Actualice sus números de contacto aquí!</h3>
-            {/* Aquí puedes agregar más opciones para editar o actualizar información del usuario */}
-        </div>
+  const handleEdit = (index) => {
+    setEditMode({ type: 'phone', index });
+    setNewPhone(userData.telefonos[index]);
+    setShowEditModal(true);
+  };
+
+  const handleUpdate = () => {
+    const updatedPhones = { ...userData.telefonos, [`telefono${editMode.index + 1}`]: newPhone };
+    handleSaveChanges({ ...userData, telefonos: updatedPhones });
+
+    setEditMode({ type: null, index: null });
+    setNewPhone('');
+    setShowEditModal(false);
+  };
+
+  const handleDelete = (index) => {
+    const updatedPhones = Object.fromEntries(
+      Object.entries(userData.telefonos).filter(([key]) => key !== `telefono${index + 1}`)
     );
+    handleSaveChanges({ ...userData, telefonos: updatedPhones });
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!userData) {
+    return <div>No user data available</div>;
+  }
+
+  return (
+    <div>
+      <h2>Bienvenido ¡{userData.username}!</h2>
+      <h4>Que necesitas hoy?</h4>
+      <p>Apellido: {userData.apellido}</p>
+      <p>Email: {userData.email}</p>
+<hr />
+      <h3>Actualice sus numeros de contacto aqui!</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Teléfono</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {Object.entries(userData.telefonos).map(([key, telefono], index) => (
+            <tr key={index}>
+              <td>{telefono}</td>
+              <td>
+                <Button variant="warning" onClick={() => handleEdit(index)}>Editar</Button>
+                <Button variant="danger" onClick={() => handleDelete(index)}>Eliminar</Button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <Button variant="primary" onClick={() => { setEditMode({ type: 'phone', index: null }); setShowEditModal(true); }}>
+        Agregar Teléfono
+      </Button>
+
+      <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>{editMode.index === null ? 'Agregar Teléfono' : 'Actualizar Teléfono'}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group controlId="formInput">
+              <Form.Label>Número de teléfono</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Ingrese número de teléfono"
+                value={newPhone}
+                onChange={(e) => setNewPhone(e.target.value)}
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowEditModal(false)}>
+            Cancelar
+          </Button>
+          <Button variant="primary" onClick={editMode.index === null ? handleAddPhone : handleUpdate}>
+            {editMode.index === null ? 'Agregar Teléfono' : 'Actualizar Teléfono'}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </div>
+  );
 }
 
 export default UserProfile;

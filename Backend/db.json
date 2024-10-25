@@ -7,7 +7,18 @@
       "email": "edpsantii328@gmail.com",
       "contraseña": "25d55ad283aa400af464c76d713c07ad",
       "role": "admin",
-      "password": "$2a$10$b8KriJfjYcBlcfrW7gCt1OUvofWXfUWDmxju3ID5F/557VgpuJG06"
+      "password": "$2a$10$b8KriJfjYcBlcfrW7gCt1OUvofWXfUWDmxju3ID5F/557VgpuJG06",
+      "tarjetasDeCredito": {
+        "tarjeta1": {
+          "numero": "32321",
+          "nombre": "dsds",
+          "fechaVencimiento": "2024-10-31",
+          "codigoSeguridad": "321321"
+        }
+      },
+      "telefonos": {
+        "telefono1": "321321321321"
+      }
     },
     {
       "id": "229d",
