@@ -4,9 +4,10 @@
       "id": "1",
       "username": "admin123",
       "apellido": "perez",
-      "email": "admin123@gmail.com",
+      "email": "edpsantii328@gmail.com",
       "contraseña": "25d55ad283aa400af464c76d713c07ad",
-      "role": "admin"
+      "role": "admin",
+      "password": "$2a$10$b8KriJfjYcBlcfrW7gCt1OUvofWXfUWDmxju3ID5F/557VgpuJG06"
     },
     {
       "id": "229d",
@@ -44,7 +45,7 @@
       "profundidad": "300",
       "pesoNeto": "30",
       "autor": "admin123",
-      "cantidad": 231321313,
+      "cantidad": 231321309,
       "imagenes": {
         "imagen1": "",
         "imagen2": "",
@@ -328,6 +329,30 @@
         "product1": {
           "productId": "679d",
           "cantidad": 8,
+          "precio": 100000,
+          "userId": 1,
+          "autor": "admin123"
+        }
+      }
+    },
+    {
+      "id": "0839",
+      "user": {
+        "IdUser": "1",
+        "nombre": "admin123",
+        "email": "edpsantii328@gmail.com",
+        "telefono": "321312313",
+        "direccion": "dadadsa",
+        "ciudad": "dsdsadas",
+        "codigoPostal": "3321312",
+        "tarjeta": "321312312",
+        "vencimiento": "321321312",
+        "cvv": "321321312"
+      },
+      "products": {
+        "product1": {
+          "productId": "679d",
+          "cantidad": 4,
           "precio": 100000,
           "userId": 1,
           "autor": "admin123"

@@ -3,14 +3,14 @@ const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'oficialmegamuebles@gmail.com',
+    user: 'oficialMegamuebles@gmail.com',
     pass: 'fxsw kcfc xzmm rmur', // Asegúrate de que la contraseña sea correcta
   },
 });
 
 const sendResetEmail = async (email, resetLink) => {
     const mailOptions = {
-      from: 'oficialmegamuebles@gmail.com',
+      from: 'oficialMegamuebles@gmail.com',
       to: email,
       subject: 'Restablecimiento de Contraseña - Mega Muebles',
       html: `

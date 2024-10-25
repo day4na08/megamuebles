@@ -13,8 +13,7 @@ function Filtros({ filtros, setFiltros }) {
   const telas = ["", "Cuero", "Telabonita", "Lino"];
   const acabados = ["", "Cuero", "Aceite", "Liso", "Transparente", "Mate", "Brillante"];
   const colores = ["", "Negro", "Madera", "Blanco", "Azul Marino", "Marrón"];
-  const tapizMateriales = ["", "Cuero", "Tela"];
-  const materialesInternos = ["", "Triplex", "Contrachapado", "Espuma", "Metal"];
+
 
   return (
     <div className="filtros-container">
@@ -24,7 +23,7 @@ function Filtros({ filtros, setFiltros }) {
         <span>Categoría: </span>
         <select name="categoria" value={filtros.categoria} onChange={handleChange}>
           <option value="">Todas</option>
-          <option value="mueble">Mueble</option>
+          <option value="Mueble">Mueble</option>
         </select>
       </label>
 
