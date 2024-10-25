@@ -22,6 +22,7 @@ import Tendencias from "../pages/Tendencias.jsx";
 import SobreNosotros from "../pages/SobreNosotros.jsx";
 import Restablecer from "../pages/Restablecer.jsx";
 import RestablecerContraseña from "../pages/RestablecerContraseña.jsx";
+import TermsAndConditions from "../components/TermsAndConditions";
 
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
         <Route path="/Ubicanos" element={<Ubicanos />} />
         <Route path="/Restablecer" element={<Restablecer />} />
         <Route path="/restablecer/:token" element={<RestablecerContraseña />} />
+        <Route path="/TermsAndConditions" element={<TermsAndConditions />} />
 
 
 

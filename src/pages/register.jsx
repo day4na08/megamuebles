@@ -230,7 +230,7 @@ class Register extends Component {
                                     required
                                 />
                                 <label htmlFor="terms">
-                                    Acepto los <a href="/terms" target="_blank" rel="noopener noreferrer">términos y condiciones</a>
+                                    Acepto los <a href="/TermsAndConditions" target="_blank" rel="noopener noreferrer">términos y condiciones</a>
                                 </label>
                             </div>
 

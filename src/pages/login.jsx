@@ -179,7 +179,7 @@ class Login extends Component {
                                 >
                                     <i className={showPassword ? 'fas fa-eye' : 'fas fa-eye-slash'}></i>
                                 </button>
-                                {!isPasswordValid && <p className="error">La contraseña debe tener al menos 6 caracteres.</p>}
+                                {!isPasswordValid && <p className="error">La contraseña debe tener al menos  caracteres.</p>}
                             </div>
                             {this.state.error && <p className="error">{this.state.error}</p>}
                             <div className="btn-enter">
