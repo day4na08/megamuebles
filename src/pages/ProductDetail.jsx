@@ -4,6 +4,7 @@ import axios from 'axios';
 import { CartContext } from '../components/CartContext.jsx';
 import NavBar from '../components/Navbar';
 import Footer from '../components/Footer';
+import '../css/ProductDetail.css'
 
 const ProductDetail = () => {
   const { id } = useParams();

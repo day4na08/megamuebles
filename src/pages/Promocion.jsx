@@ -1,6 +1,13 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom'; // Importar useNavigate
 
 const PromocionMuebles = () => {
+  const navigate = useNavigate(); // Inicializar useNavigate
+
+  const goToUbicanos = () => {
+    navigate('/ubicanos'); // Redirigir al componente "Ubícanos"
+  };
+
   return (
     <div style={styles.container}>
       <div style={styles.banner}>
@@ -34,7 +41,9 @@ const PromocionMuebles = () => {
           Visítanos en <strong>MegaMuebles</strong> y comienza a crear el espacio
           que siempre has deseado. ¡Aprovecha nuestras ofertas y renueva tu hogar!
         </p>
-        <button style={styles.ctaButton}>Ver promociones</button>
+        <button style={styles.ctaButton} onClick={goToUbicanos}>
+          ¡Encuentranos en Bogotá!
+        </button>
       </div>
     </div>
   );
@@ -48,7 +57,7 @@ const styles = {
     color: '#333',
   },
   banner: {
-    backgroundColor: '#808080', // Reemplazado con gris
+    backgroundColor: '#808080', 
     color: 'white',
     padding: '50px 20px',
     textAlign: 'center',
@@ -77,7 +86,7 @@ const styles = {
   subHeader: {
     fontSize: '28px',
     fontWeight: '600',
-    color: '#808080', // Reemplazado con gris
+    color: '#808080',
     marginTop: '20px',
   },
   ctaSection: {
@@ -93,7 +102,7 @@ const styles = {
     margin: '10px 0',
   },
   ctaButton: {
-    backgroundColor: '#808080', // Reemplazado con gris
+    backgroundColor: '#808080',
     color: 'white',
     padding: '10px 20px',
     border: 'none',
@@ -108,3 +117,4 @@ const styles = {
 };
 
 export default PromocionMuebles;
+

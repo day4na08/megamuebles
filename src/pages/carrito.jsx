@@ -1,12 +1,15 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import NavBar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { CartContext } from '../components/CartContext';
-import CheckoutForm from './Checkout'; // Importar el formulario de compra
+import CheckoutForm from './Checkout';
 import '../css/Cart.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Modal, Button } from 'react-bootstrap';
 
 const Carrito = () => {
   const { cartItems, setCartItems } = useContext(CartContext);
+  const [showModal, setShowModal] = useState(false);
 
   const total = cartItems.reduce((acc, item) => acc + item.precio * item.quantity, 0).toFixed(2);
 
@@ -15,8 +18,8 @@ const Carrito = () => {
   };
 
   const handlePurchaseComplete = () => {
-    // Aquí podrías redirigir a otra página o simplemente limpiar el carrito
     console.log('Compra completada');
+    setShowModal(false); // Cerrar el modal después de la compra
   };
 
   return (
@@ -50,12 +53,22 @@ const Carrito = () => {
 
               <div className="cart-summary">
                 <h3>Total: ${total}</h3>
+                <Button variant="primary" onClick={() => setShowModal(true)}>
+                  Confirmar Compra
+                </Button>
               </div>
             </div>
           )}
 
-          {/* Mostrar el formulario de compra */}
-          <CheckoutForm onPurchaseComplete={handlePurchaseComplete} />
+          {/* Modal de Bootstrap para el formulario de compra */}
+          <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+            <Modal.Header closeButton>
+              <Modal.Title>Detalles de la Compra</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <CheckoutForm onPurchaseComplete={handlePurchaseComplete} />
+            </Modal.Body>
+          </Modal>
         </div>
       </div>
       

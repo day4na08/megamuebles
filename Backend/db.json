@@ -145,7 +145,11 @@
       "cantidad": 20,
       "categoria": "Mueble",
       "imagenes": {
-        "imagen1": "https://i.ibb.co/mzPYzr2/mueble4.jpg"
+        "imagen1": "https://tugocolombia.vtexassets.com/arquivos/ids/273048-800-auto?v=638193348157300000&width=800&height=auto&aspect=true",
+        "imagen2": "https://tugocolombia.vtexassets.com/arquivos/ids/273049-800-auto?v=638193348162570000&width=800&height=auto&aspect=true",
+        "imagen3": "https://tugocolombia.vtexassets.com/arquivos/ids/273126-800-auto?v=638195208847000000&width=800&height=auto&aspect=true",
+        "imagen4": "https://tugocolombia.vtexassets.com/arquivos/ids/273050-800-auto?v=638193348166870000&width=800&height=auto&aspect=true",
+        "model3D": "d05970ba117446bd945bbef42361e546"
       },
       "userId": 1
     },
