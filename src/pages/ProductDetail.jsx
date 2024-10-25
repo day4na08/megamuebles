@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { CartContext } from '../components/CartContext.jsx';
 import NavBar from '../components/Navbar';
 import Footer from '../components/Footer';
-import '../css/ProductDetail.css';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -15,40 +14,13 @@ const ProductDetail = () => {
   const { addToCart } = useContext(CartContext);
   const [cantidad, setCantidad] = useState(1);
   const [activeSection, setActiveSection] = useState('descripcion');
-  const [zoomed, setZoomed] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [startPosition, setStartPosition] = useState({ x: 0, y: 0 });
-  const imgRef = useRef(null);
+  const [selectedImage, setSelectedImage] = useState('');
 
-  const toggleZoom = () => {
-    setZoomed(!zoomed);
-    if (!zoomed) {
-      setPosition({ x: 0, y: 0 }); // Reset position when zooming out
-    }
-  };
-
-  const handleMouseDown = (e) => {
-    if (!zoomed) return;
-
-    setIsDragging(true);
-    setStartPosition({
-      x: e.clientX - position.x,
-      y: e.clientY - position.y,
-    });
-  };
-
-  const handleMouseMove = (e) => {
-    if (!isDragging) return;
-
-    setPosition({
-      x: e.clientX - startPosition.x,
-      y: e.clientY - startPosition.y,
-    });
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
+  // Datos del modelo de Sketchfab
+  const sketchfabModel = {
+    title: "Modelo Sketchfab",
+    // Usa el ID del modelo 3D directamente
+    iframeSrc: `https://sketchfab.com/models/${producto?.imagenes?.model3D}/embed`
   };
 
   useEffect(() => {
@@ -56,6 +28,7 @@ const ProductDetail = () => {
       try {
         const response = await axios.get(`http://localhost:3001/products/${id}`);
         setProducto(response.data);
+        setSelectedImage(response.data.imagenes?.imagen1 || '');
         fetchProductosSimilares(response.data.categoria);
       } catch (error) {
         console.error('Error fetching product details:', error);
@@ -68,7 +41,7 @@ const ProductDetail = () => {
     const fetchProductosSimilares = async (categoria) => {
       try {
         const response = await axios.get(`http://localhost:3001/products?categoria=${categoria}`);
-        setProductosSimilares(response.data.filter(p => p.id !== parseInt(id)).slice(0, 4));
+        setProductosSimilares(response.data.filter(p => p.id !== id).slice(0, 4));
       } catch (error) {
         console.error('Error fetching similar products:', error);
       }
@@ -88,134 +61,146 @@ const ProductDetail = () => {
 
   const handleQuantityChange = (e) => {
     const newQuantity = Number(e.target.value);
-    setCantidad(Math.max(newQuantity, 1)); // No permitir cantidad menor a 1
+    setCantidad(Math.max(newQuantity, 1));
   };
 
-  const showSection = (sectionId) => {
-    setActiveSection(sectionId);
-  };
-
-  // Handle case where `medidas` might be undefined
-  
+  const showSection = (sectionId) => setActiveSection(sectionId);
 
   return (
     <>
       <NavBar />
-      <div className='product-detail'>
-        <div className="product-detail-container">
-          <div className="productinfo">
-            <div
-              className={`product-image ${zoomed ? 'zoom' : ''} ${isDragging ? 'active' : ''}`}
-              onClick={toggleZoom}
-              onMouseDown={handleMouseDown}
-              onMouseMove={handleMouseMove}
-              onMouseUp={handleMouseUp}
-              onMouseLeave={handleMouseUp} /* Para terminar arrastre al salir del área */
-              style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
-            >
-              {producto.imagenes?.imagen1 && (
+      <div className="container mt-5">
+        <div className="row">
+          <div className="col-md-6">
+            <div className="product-image">
+              {selectedImage ? (
                 <img
-                  ref={imgRef}
-                  src={producto.imagenes.imagen1}
+                  src={selectedImage}
                   alt={producto.name}
-                  style={{
-                    transform: zoomed
-                      ? `scale(2) translate(${position.x}px, ${position.y}px)`
-                      : 'scale(1)',
-                    transition: isDragging ? 'none' : 'transform 0.3s ease', // Sin transición mientras se arrastra
-                  }}
+                  className="img-fluid"
                 />
+              ) : (
+                <iframe
+                  title={sketchfabModel.title}
+                  width="100%"
+                  height="480"
+                  src={sketchfabModel.iframeSrc}
+                  frameBorder="0"
+                  allow="autoplay; fullscreen; vr"
+                  allowFullScreen
+                ></iframe>
               )}
             </div>
-            <div className="product-info">
-              <h1>{producto.name}</h1>
-              <hr />
-              <p>{producto.descripcion}</p>
-              <hr />
-              <p>Precio: ${producto.precio.toFixed(2)}</p>
-              <p>Categoría: {producto.categoria}</p>
-              <div className="quantity-controls">
-                <button onClick={handleAddToCart}>Agregar al carrito</button>
+            <div className="mt-2 d-flex">
+              {Object.values(producto.imagenes || {})
+                .filter((img, index) => index < 4) // Asegúrate de mostrar solo hasta 4 imágenes
+                .map((img, index) => (
+                  <img
+                    key={index}
+                    src={img}
+                    alt={`Thumbnail ${index + 1}`}
+                    className="img-thumbnail me-2"
+                    style={{ width: '100px', cursor: 'pointer' }}
+                    onClick={() => setSelectedImage(img)}
+                  />
+                ))}
+              <div
+                className="img-thumbnail me-2"
+                style={{ width: '100px', cursor: 'pointer' }}
+                onClick={() => setSelectedImage('')} // Cambia a iframe
+              >
+                <h6>___3D___</h6>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-6">
+            <h1>{producto.name}</h1>
+            <p>{producto.descripcion}</p>
+            <p><strong>Precio:</strong> ${producto.precio.toFixed(2)}</p>
+            <p><strong>Categoría:</strong> {producto.categoria}</p>
+            <div className="d-flex align-items-center mb-3">
+              <button className="btn btn-primary me-2" onClick={handleAddToCart}>Agregar al carrito</button>
+              <div className="input-group" style={{ width: '120px' }}>
                 <button
-                  onClick={() => setCantidad(prevCantidad => Math.max(prevCantidad - 1, 1))}
+                  className="btn btn-outline-secondary"
+                  onClick={() => setCantidad(Math.max(cantidad - 1, 1))}
                   disabled={cantidad <= 1}
                 >
                   -
                 </button>
                 <input
-                  className='infops'
                   type="number"
+                  className="form-control text-center"
                   value={cantidad}
                   onChange={handleQuantityChange}
                   min="1"
                 />
-                <button onClick={() => setCantidad(prevCantidad => prevCantidad + 1)}>+</button>
+                <button className="btn btn-outline-secondary" onClick={() => setCantidad(cantidad + 1)}>+</button>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="F-tecnica">
-          <div className="menu">
-            <button className="min-var" onClick={() => showSection('descripcion')}>Descripción</button>
-            <button className="min-var" onClick={() => showSection('garantia')}>Garantía</button>
-            <button className="min-var" onClick={() => showSection('tips')}>TIPS de Cuidado</button>
+        <div className="my-4">
+          <div className="btn-group" role="group">
+            <button className="btn btn-outline-dark" onClick={() => showSection('descripcion')}>Descripción</button>
+            <button className="btn btn-outline-dark" onClick={() => showSection('garantia')}>Garantía</button>
+            <button className="btn btn-outline-dark" onClick={() => showSection('tips')}>TIPS de Cuidado</button>
           </div>
 
-          <div className="ficha">
-            <div className={`section ${activeSection === 'descripcion' ? 'active' : ''}`}>
-              <h1>{producto.name}</h1>
-              <hr />
-              <table>
-                <thead>
-                  <tr><th>Campo</th><th>Valor</th></tr>
-                </thead>
-                <tbody>
-                  <tr><td>Estilo</td><td>{producto.estilo}</td></tr>
-                  <tr><td>Peso Neto</td><td>{producto.pesoNeto}</td></tr>
-                  <tr><td>Material</td><td>{producto.material}</td></tr>
-                  <tr><td>Color</td><td>{producto.color}</td></tr>
-                  <tr><td>Requiere Armado</td><td>{producto.requiereArmado}</td></tr>
-                  <tr><td>Alto</td><td>{producto.alto}</td></tr>
-                  <tr><td>Ancho</td><td>{producto.ancho}</td></tr>
-                  <tr><td>Profundidad</td><td>{producto.profundidad}</td></tr>
-                  <tr><td>Material del tapiz</td><td>{producto.tapizMaterial}</td></tr>
-                </tbody>
-              </table>
-              <hr />
-              <h3>MegaMuebles</h3>
-              <p>Queremos que te sientas como en casa... (información adicional).</p>
-            </div>
-            <div className={`section ${activeSection === 'garantia' ? 'active' : ''}`}>
-              <h2>Garantía</h2>
-              <p>La Garantia Estandar de Nuestros Productos es de dos Años</p>
-            </div>
-
-            <div className={`section ${activeSection === 'tips' ? 'active' : ''}`}>
-              <h2>TIPS de Cuidado</h2>
-              <p>Consejos para el cuidado del producto.</p>
-            </div>
+          <div className="mt-3">
+            {activeSection === 'descripcion' && (
+              <div>
+                <h3>{producto.name}</h3>
+                <table className="table">
+                  <thead><tr><th>Campo</th><th>Valor</th></tr></thead>
+                  <tbody>
+                    <tr><td>Estilo</td><td>{producto.estilo}</td></tr>
+                    <tr><td>Peso Neto</td><td>{producto.pesoNeto}</td></tr>
+                    <tr><td>Material</td><td>{producto.material}</td></tr>
+                    <tr><td>Color</td><td>{producto.color}</td></tr>
+                    <tr><td>Requiere Armado</td><td>{producto.requiereArmado}</td></tr>
+                    <tr><td>Alto</td><td>{producto.alto}</td></tr>
+                    <tr><td>Ancho</td><td>{producto.ancho}</td></tr>
+                    <tr><td>Profundidad</td><td>{producto.profundidad}</td></tr>
+                    <tr><td>Material del tapiz</td><td>{producto.tapizMaterial}</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            )}
+            {activeSection === 'garantia' && (
+              <div><h2>Garantía</h2><p>La Garantía Estándar de Nuestros Productos es de dos Años.</p></div>
+            )}
+            {activeSection === 'tips' && (
+              <div><h2>TIPS de Cuidado</h2><p>Consejos para el cuidado del producto.</p></div>
+            )}
           </div>
         </div>
 
-        <hr />
-        <div className="similar-products">
-          <h2>Más Productos Similares</h2>
-          <div className="resultados-container">
-            <div className="resultados-grid">
-              {productosSimilares.map((prod) => (
-                <div key={prod.id} className="resultado-card">
-                  <img src={prod.imagenes?.imagen1} alt={prod.name} />
-                  <div className="resultado-info">
-                    <h3>{prod.name}</h3>
-                    <p>${prod.precio.toFixed(2)}</p>
-                    <Link to={`/productDetail/${prod.id}`}>Ver más</Link>
-                  </div>
-                </div>
-              ))}
-            </div>
+        <div className="my-2">
+  <h2>Más Productos Similares</h2>
+  <div className="row g-2"> {/* Cambié g-4 a g-2 para reducir el espaciado entre las columnas */}
+    {productosSimilares.map((prod) => (
+      <div key={prod.id} className="col-md-10 mb-7"> {/* Cambié a col-md-4 y mb-2 para reducir el margen inferior */}
+        <div className="card h-300 border-0 shadow-sm text-center">
+          <img
+            src={prod.imagenes?.imagen1}
+            className="card-img-top"
+            alt={prod.name}
+            style={{ objectFit: 'cover', height: '200px' }} // Mantengo la altura de la imagen
+          />
+          <div className="card-body d-flex flex-column justify-content-center align-items-center">
+            <h5 className="card-title">{prod.name}</h5>
+            <p className="card-text">${prod.precio.toFixed(2)}</p>
+            <Link to={`/productDetail/${prod.id}`} className="btn btn-outline-primary">Ver más</Link>
           </div>
         </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+
       </div>
       <Footer />
     </>

@@ -60,10 +60,10 @@
       "categoria": "Mueble",
       "imagenes": {
         "imagen1": "https://i.ibb.co/Wc6xz62/mueble9.jpg",
-        "imagen2": "",
-        "imagen3": "",
-        "imagen4": "",
-        "imagen5": ""
+        "imagen2": "https://i.ibb.co/Wc6xz62/mueble9.jpg",
+        "imagen3": "https://i.ibb.co/Wc6xz62/mueble9.jpg",
+        "imagen4": "https://i.ibb.co/Wc6xz62/mueble9.jpg",
+        "model3D": "08e7d7b0e95f46439dda4a7009fde3b2"
       },
       "userId": 1
     },
@@ -92,7 +92,7 @@
         "imagen2": "",
         "imagen3": "",
         "imagen4": "",
-        "imagen5": ""
+        "model3D": ""
       },
       "userId": 1
     },
@@ -120,7 +120,7 @@
         "imagen2": "",
         "imagen3": "",
         "imagen4": "",
-        "imagen5": ""
+        "model3D": ""
       },
       "userId": 1
     },
