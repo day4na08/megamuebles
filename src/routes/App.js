@@ -20,7 +20,8 @@ import About from '../components/About.jsx';
 import Ubicanos from "../pages/Ubicanos.jsx";
 import Tendencias from "../pages/Tendencias.jsx";
 import SobreNosotros from "../pages/SobreNosotros.jsx";
-import RecoverPassword from "../components/RecoverPassword.jsx";
+import Restablecer from "../pages/Restablecer.jsx";
+import RestablecerContraseña from "../pages/RestablecerContraseña.jsx";
 
 
 function App() {
@@ -47,7 +48,8 @@ function App() {
         <Route path="/SobreNosotros" element={<SobreNosotros />} />
         <Route path="/Tendencias" element={<Tendencias />} />
         <Route path="/Ubicanos" element={<Ubicanos />} />
-        <Route path="/RecoverPassword" element={<RecoverPassword />} />
+        <Route path="/Restablecer" element={<Restablecer />} />
+        <Route path="/restablecer/:token" element={<RestablecerContraseña />} />
 
 
 
