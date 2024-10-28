@@ -22,7 +22,9 @@ const Catalog = () => {
             <NavBar />
             <div className="catalog">
                 <h1>Catálogo de Muebles</h1>
+                <hr/>
                 <div className="catalogo-container">
+
                     <div className="filterPM">
                         <Filtros filtros={filtros} setFiltros={setFiltros} />
                     </div>
@@ -43,19 +45,22 @@ const Catalog = () => {
         align-items: center;
     }
 
+    hr{
+    color:black;            
+    }
+
     .catalogo-container {
         display: flex;
         max-width: 1500px;
         width: 100%;
-        padding-bottom: 210px;
+        padding-bottom: 110px;
     }
 
     .filterPM {
         flex: 0 0 220px; /* Más estrecho */
-        padding: 20px;
-        background-color: rgba(220, 220, 220, 0.8); /* Color opaco sin sombra */
+        padding: 10px;
         border-radius: 8px;
-        margin-right: 30px;
+        margin-right: 10px;
     }
 
     .filterRP {

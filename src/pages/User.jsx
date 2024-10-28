@@ -5,9 +5,7 @@ import CreditCardTable from '../components/user/CreditCardTable';
 import '../css/UserPage.css';
 import NavBar from '../components/Navbar';
 import Cookies from 'universal-cookie';
-import Ventas from '../components/user/Ventas';
 import Compras from '../components/user/Compras';
-import ProductCrud from '../components/ProductCrud';
 
 const cookies = new Cookies();
 
@@ -52,8 +50,6 @@ const UserPage = () => {
             <li onClick={() => setActiveTab('info')}>Tu Información</li>
             <li onClick={() => setActiveTab('cards')}>Tus Tarjetas</li>
             <li onClick={() => setActiveTab('compras')}>Historial de Compras</li>
-            <li onClick={() => setActiveTab('ventas')}>Historial de ventas</li>
-            <li onClick={() => setActiveTab('products')}>Tus Productos</li>
           </ul>
         </div>
         <div className="content">{renderContent()}</div>

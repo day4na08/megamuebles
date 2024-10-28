@@ -136,16 +136,16 @@ const NavBar = () => {
                         </li>
                       <li className="list">
                         {isLoggedIn ? (
-                        <div className="nav-link"  onClick={handleAccountRedirect}>
-                          <i className="bx bx-user-circle icon">
+                        <Link className="nav-link" onClick={handleAccountRedirect}>
+                        <i className="bx bx-user-circle icon">
                             <span className="link">
-                              {userData && userData.username ? userData.username : 'Usuario'}
+                            {userData && userData.username ? userData.username : 'Usuario'}
                             </span>
-                          </i>
-                          
-                        </div>
+                                </i>
+                            </Link>
+
                       ) : (
-                        <div className="nav-link" onClick={handleAccountClick}>
+                        <Link className="nav-link" onClick={handleAccountClick}>
                           <i className="bx bx-user-circle icon">
                             <span className="link"> Iniciar Sesión</span>
                           </i>
@@ -156,7 +156,7 @@ const NavBar = () => {
                               onLogout={handleLogout}
                             />
                           )}
-                        </div>
+                        </Link>
                       )}
 
                       </li>
@@ -213,11 +213,11 @@ const NavBar = () => {
                         </li>
                         <li className="list">
                             {isLoggedIn ? (
-                              <div className="nav-link" onClick={handleAccountRedirect}>
+                              <Link className="nav-link" onClick={handleAccountRedirect}>
                                 <i className="bx bx-user-circle icon">
                                   <span className="link"> Tu Cuenta</span>
                                 </i>
-                              </div>
+                              </Link>
                             ) : (
                               <Link className="nav-link" to="/Login">
                                 <i className="bx bx-user-circle icon">

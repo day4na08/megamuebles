@@ -1,5 +1,4 @@
 import React from 'react';
-import '../../css/filtros.css';
 
 function Filtros({ filtros, setFiltros }) {
   const handleChange = (e) => {
@@ -17,7 +16,7 @@ function Filtros({ filtros, setFiltros }) {
 
   return (
     <div className="filtros-container">
-      <h3>Filtros de Búsqueda</h3>
+      <h3>Filtros de Búsqueda :c</h3>
 
       <label>
         <span>Categoría: </span>
@@ -86,15 +85,15 @@ function Filtros({ filtros, setFiltros }) {
         .filtros-container {
           display: flex;
           flex-direction: column;
-          padding: 40px;
+          padding: 30px;
           width: 380px; /* Ancho ajustado */
           background-color: #ffffff; /* Fondo más claro */
-          border-right: 1px solid #ddd; /* Borde sutil */
+          border-right: 4px solid #ddd; /* Borde sutil */
           max-height: 80vh; /* Altura máxima ajustada */
           overflow-y: auto; /* Scroll para contenido largo */
           position: relative; /* Cambiado de fixed a relative */
-          left: 15px; /* Separado del borde izquierdo */
-          top: 1px; /* Separado del top para más espacio */
+          left: 1px; /* Separado del borde izquierdo */
+          top: 1px; /* Separado del top para más espacio */ 
           box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Sombra sutil */
         }
 

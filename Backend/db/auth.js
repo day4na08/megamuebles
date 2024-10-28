@@ -1,14 +1,17 @@
 const express = require('express');
-const bodyParser = require('body-parser');
+const app = express();
 const mysql = require('mysql');
 const md5 = require('md5');
 const cors = require('cors');
 
+app.use(express.json());
+app.use(cors());
+
 const conexion = mysql.createConnection({
-    host: process.env.DB_HOST || "localhost",
-    database: process.env.DB_NAME || "megamueblesdb",
-    user: process.env.DB_USER || "root",
-    password: process.env.DB_PASSWORD || ""
+    host:"localhost",
+    database:"megamueblesdb",
+    user:"root",
+    password: ""
 });
 
 conexion.connect(err => {
@@ -19,9 +22,7 @@ conexion.connect(err => {
     console.log("Conexión a la base de datos exitosa");
 });
 
-const app = express();
-app.use(bodyParser.json());
-app.use(cors());
+
 // Ruta de registro
 app.post('/register', (req, res) => {
     const { username, apellido, email, password, role } = req.body;
@@ -86,90 +87,75 @@ app.get('/users/:id', (req, res) => {
 
 
 // Ruta para agregar un nuevo producto
-app.post('/api/productos', (req, res) => {
-    const { 
-        name, material, estilo, tela, acabado, color, tapizMaterial, 
-        materialInterno, precio, descripcion, requiereArmado, alto, 
-        ancho, profundidad, pesoNeto, cantidad, autor, userId,
-        imagen1, imagen2, imagen3, imagen4, imagen5 
-    } = req.body;
+app.post('/productos', (req, res) => {
+    const name  = req.body.name 
+    const material = req.body.material
+    const estilo = req.body.estilo
+    const tela = req.body.tela
+    const acabado = req.body.acabado
+    const color = req.body.color
+    const tapizMaterial = req.body.tapizMaterial
+    const materialInterno = req.body.materialInterno
+    const precio = req.body.precio
+    const descripcion = req.body.descripcion
+    const requiereArmado = req.body.requiereArmado
+    const alto = req.body.alto
+    const ancho = req.body.ancho
+    const profundidad = req.body.profundidad
+    const pesoNeto = req.body.pesoNeto
+    const cantidad = req.body.cantidad
+    const autor = req.body.autor
+    const imagen1 = req.body.imagen1
+    const imagen2 = req.body.imagen2
+    const imagen3 = req.body.imagen3
+    const imagen4 = req.body.imagen4
+    const imagen3D = req.body.imagen3D
 
-    // Validación básica
-    if (!name || !precio || !cantidad) {
-        return res.status(400).send('Faltan campos requeridos (nombre, precio, cantidad)');
-    }
+    conexion.query('INSERT INTO productos (name, material, estilo, tela, acabado, color, tapizMaterial, materialInterno, precio, descripcion, requiereArmado, alto, ancho, profundidad, pesoNeto, cantidad, autor, imagen1, imagen2, imagen3, imagen4, imagen3D) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+        [name, material, estilo, tela, acabado, color, tapizMaterial, materialInterno, precio, descripcion, requiereArmado, alto, ancho, profundidad, pesoNeto, cantidad, autor, imagen1, imagen2, imagen3, imagen4, imagen3D],
+    (err,result)=>{
+        if(err){
+            console.log(err);
 
-    const sql = `
-        INSERT INTO productos 
-        (name, material, estilo, tela, acabado, color, tapizMaterial, 
-        materialInterno, precio, descripcion, requiereArmado, alto, 
-        ancho, profundidad, pesoNeto, cantidad, autor, userId,
-        imagen1, imagen2, imagen3, imagen4, imagen5)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `;
-
-    const values = [
-        name,
-        material || null,
-        estilo || null,
-        tela || null,
-        acabado || null,
-        color || null,
-        tapizMaterial || null,
-        materialInterno || null,
-        precio ? parseFloat(precio) : 0,
-        descripcion || null,
-        requiereArmado || null,
-        alto ? parseFloat(alto) : null,
-        ancho ? parseFloat(ancho) : null,
-        profundidad ? parseFloat(profundidad) : null,
-        pesoNeto ? parseFloat(pesoNeto) : null,
-        cantidad ? parseInt(cantidad) : 0,
-        autor || null,
-        userId || null,
-        imagen1 || null,
-        imagen2 || null,
-        imagen3 || null,
-        imagen4 || null,
-        imagen5 || null
-    ];
-
-    conexion.query(sql, values, (err, result) => {
-        if (err) {
-            console.error('Error al agregar producto:', err);
-            return res.status(500).send('Error al agregar producto: ' + err.message);
+        }else{
+            res.send("Mueble agregado satisfactoriamente :))");
         }
-        res.status(201).json({
-            message: 'Producto agregado con éxito',
-            productId: result.insertId
-        });
-    });
-});
-// Ruta para obtener todos los productos
-app.get('/api/productos', (req, res) => {
-    const userId = req.query.userId;
-    let query = 'SELECT * FROM productos';
-    
-    if (userId) {
-        query += ' WHERE userId = ?';
-        conexion.query(query, [userId], (err, results) => {
-            if (err) {
-                console.error('Error al obtener productos:', err);
-                return res.status(500).send('Error al obtener productos');
-            }
-            res.json(results);
-        });
-    } else {
-        conexion.query(query, (err, results) => {
-            if (err) {
-                console.error('Error al obtener productos:', err);
-                return res.status(500).send('Error al obtener productos');
-            }
-            res.json(results);
-        });
     }
+    );
 });
 
+//leer productos :)
+app.get("/llamarProductos",(req,res)=>{
+
+    conexion.query('SELECT * FROM productos',
+        (err,result)=>{
+            if(err){
+                console.log(err);
+
+            }else{
+                res.send(result)
+            }
+        }
+    )    
+})
+
+// Ruta para agregar un nuevo producto2
+app.post('/productos2', (req, res) => {
+    const { name, material, color, precio, descripcion, imagen3D } = req.body;
+
+    conexion.query(
+        'INSERT INTO productos2 (name, material, color, precio, descripcion, imagen3D) VALUES (?, ?, ?, ?, ?, ?)',
+        [name, material, color, precio, descripcion, imagen3D],
+        (err, result) => {
+            if (err) {
+                console.log("Error al agregar el mueble:", err);
+                res.status(500).send("Error en el servidor");
+            } else {
+                res.send("Mueble agregado satisfactoriamente :))");
+            }
+        }
+    );
+});
 
 // Inicia el servidor
 const PORT = 3001;

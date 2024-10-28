@@ -2,10 +2,9 @@
     display: flex;
     flex-direction: column;
     padding: 40px;
-    width: 320px; /* Ancho ajustado */
-    background-color: #ffffff; /* Fondo más claro */
+    width: 620px; /* Ancho ajustado */
     border-right: 1px solid #ddd; /* Borde sutil */
-    height: 80vh; /* Altura completa */
+    height: 100vh; /* Altura completa */
     overflow-y: auto; /* Scroll para contenido largo */
     position: fixed; /* Fijo en la izquierda */
     left: 0; /* Pegado a la izquierda */

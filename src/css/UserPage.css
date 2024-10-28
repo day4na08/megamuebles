@@ -17,8 +17,8 @@ body {
 .sidebarpg {
   background-color: #2f3542;
   color: #ffffff;
-  width: 250px;
-  padding: 20px 10px;
+  width: 300px;
+  padding: 10px 50px;
   box-shadow: 3px 0 5px rgba(0, 0, 0, 0.2);
 }
 

@@ -17,99 +17,70 @@ class Register extends Component {
             username: '',
             apellido: '',
             email: '',
+            confirmEmail: '',
             password: '',
-            verifyPassword: '',
-            role: 'user',
+            confirmPassword: '',
+            role: 'user' 
         },
+        formErrors: {},  // Agregar el manejo de errores si se usa
         error: '',
         success: false,
-        redirect: null,
-        acceptedTerms: false,
-        formErrors: {},
-        showPassword: false,
-        showVerifyPassword: false,
-    };
+        redirect: null 
+    }
 
-    validateField = (name, value) => {
-        let formErrors = { ...this.state.formErrors };
-        switch (name) {
-            case 'password':
-                formErrors.password = value.length < 8 ? 'La contraseña debe tener al menos 8 caracteres.' : '';
-                break;
-            case 'verifyPassword':
-                formErrors.verifyPassword = value !== this.state.form.password ? 'Las contraseñas no coinciden.' : '';
-                break;
-            case 'email':
-                formErrors.email = /\S+@\S+\.\S+/.test(value) ? '' : 'Correo electrónico no válido.';
-                break;
-            case 'username':
-            case 'apellido':
-                formErrors[name] = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(value) ? '' : 'Este campo solo puede contener letras y espacios.';
-                break;
-            default:
-                break;
-        }
-        this.setState({ formErrors });
-    };
-
-    handleChange = (e) => {
-        const { name, value } = e.target;
-        this.setState(
-            {
-                form: {
-                    ...this.state.form,
-                    [name]: value,
-                },
-            },
-            () => this.validateField(name, value)
-        );
-    };
-
-    handleCheckboxChange = (e) => {
-        this.setState({ acceptedTerms: e.target.checked });
-    };
+    handleChange = e => {
+        this.setState({
+            form: {
+                ...this.state.form,
+                [e.target.name]: e.target.value
+            }
+        });
+    }
 
     handleSubmit = async (event) => {
         event.preventDefault();
-        const { password, verifyPassword } = this.state.form;
-        const { acceptedTerms } = this.state;
-
-        if (!acceptedTerms) {
-            this.setState({ error: 'Debes aceptar los términos y condiciones.' });
-            return;
-        }
-
+        const { email, confirmEmail, password, confirmPassword } = this.state.form;
+    
         if (password.length < 8) {
             this.setState({ error: 'La contraseña debe tener al menos 8 caracteres.' });
             return;
         }
-
-        if (password !== verifyPassword) {
+    
+        if (password !== confirmPassword) {
             this.setState({ error: 'Las contraseñas no coinciden.' });
             return;
         }
-
+    
+        if (email !== confirmEmail) {
+            this.setState({ error: 'Los correos electrónicos no coinciden.' });
+            return;
+        }
+    
         try {
-            const response = await axios.get(baseUrl, { params: { username: this.state.form.username } });
-            if (response.data.length > 0) {
-                this.setState({ error: 'El nombre de usuario ya está en uso.' });
-            } else {
-                const newUser = {
-                    username: this.state.form.username,
-                    apellido: this.state.form.apellido,
-                    email: this.state.form.email,
-                    password: md5(this.state.form.password),
-                    role: this.state.form.role,
-                };
-                await axios.post(baseUrl, newUser);
-                this.setState({ success: true, redirect: '/login' });
-            }
+            const newUser = {
+                username: this.state.form.username,
+                apellido: this.state.form.apellido,
+                email: this.state.form.email,
+                password: this.state.form.password,  // No hagas md5 aquí, lo hace el backend
+                role: this.state.form.role
+            };
+    
+            // Solicitud POST al servidor para registrar al usuario
+            await axios.post('http://localhost:3001/register', newUser);
+            
+            // Si todo sale bien, redirigir al login
+            this.setState({ success: true });
+            this.setState({ redirect: '/login' });
+    
         } catch (error) {
-            console.log(error);
-            this.setState({ error: 'Error al intentar registrar el usuario' });
+            if (error.response && error.response.status === 400) {
+                this.setState({ error: error.response.data });
+            } else {
+                this.setState({ error: 'Error al intentar registrar el usuario' });
+            }
         }
     };
-
+    
     componentDidMount() {
         const role = cookies.get('role');
         if (role) {
@@ -141,7 +112,7 @@ class Register extends Component {
                         <h2>Registro</h2>
                         <form onSubmit={this.handleSubmit} autoComplete="off">
                             <div className="input-group">
-                                <label htmlFor="username">Nombres</label>
+                                <label htmlFor="username">Nombre de usuario</label>
                                 <input
                                     type="text"
                                     id="username"
@@ -151,7 +122,6 @@ class Register extends Component {
                                     onChange={this.handleChange}
                                     required
                                 />
-                                {this.state.formErrors.username && <p className="error">{this.state.formErrors.username}</p>}
                             </div>
                             <div className="input-group">
                                 <label htmlFor="apellido">Apellidos</label>
@@ -164,7 +134,6 @@ class Register extends Component {
                                     onChange={this.handleChange}
                                     required
                                 />
-                                {this.state.formErrors.apellido && <p className="error">{this.state.formErrors.apellido}</p>}
                             </div>
                             <div className="input-group">
                                 <label htmlFor="email">Correo Electrónico</label>
@@ -177,66 +146,70 @@ class Register extends Component {
                                     onChange={this.handleChange}
                                     required
                                 />
-                                {this.state.formErrors.email && <p className="error">{this.state.formErrors.email}</p>}
+                            </div>
+                            <div className="input-group">
+                                <label htmlFor="confirmEmail">Confirmar Correo Electrónico</label>
+                                <input
+                                    type="email"
+                                    id="confirmEmail"
+                                    name="confirmEmail"
+                                    value={this.state.form.confirmEmail}
+                                    onChange={this.handleChange}
+                                    required
+                                />
                             </div>
                             <div className="input-group">
                                 <label htmlFor="password">Contraseña</label>
-                                    <input
-                                        type={this.state.showPassword ? "text" : "password"}
-                                        id="password"
-                                        name="password"
-                                        placeholder="Ingrese su contraseña"
-                                        value={this.state.form.password}
-                                        onChange={this.handleChange}
-                                        required
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={this.togglePasswordVisibility}
-                                        className="eye-button"
-                                    >
-                                        <i className={this.state.showPassword ? 'fas fa-eye' : 'fas fa-eye-slash'}></i>
-                                    </button>
-                                {this.state.formErrors.password && <p className="error">{this.state.formErrors.password}</p>}
+                                <input
+                                    type={this.state.showPassword ? "text" : "password"}
+                                    id="password"
+                                    name="password"
+                                    placeholder="Ingrese su contraseña"
+                                    value={this.state.form.password}
+                                    onChange={this.handleChange}
+                                    required
+                                />
+                                <button
+                                    type="button"
+                                    onClick={this.togglePasswordVisibility}
+                                    className="eye-button"
+                                >
+                                    <i className={this.state.showPassword ? 'fas fa-eye' : 'fas fa-eye-slash'}></i>
+                                </button>
                             </div>
                             <div className="input-group">
-                                <label htmlFor="verifyPassword">Verificar Contraseña</label>
-                                    <input
-                                        type={this.state.showVerifyPassword ? "text" : "password"}
-                                        id="verifyPassword"
-                                        name="verifyPassword"
-                                        placeholder="Repita su contraseña"
-                                        value={this.state.form.verifyPassword}
-                                        onChange={this.handleChange}
-                                        required
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={this.toggleVerifyPasswordVisibility}
-                                        className="eye-button"
-                                    >
-                                        <i className={this.state.showVerifyPassword ? 'fas fa-eye' : 'fas fa-eye-slash'}></i>
-                                    </button>
-                                {this.state.formErrors.verifyPassword && <p className="error">{this.state.formErrors.verifyPassword}</p>}
+                                <label htmlFor="confirmPassword">Verificar Contraseña</label>
+                                <input
+                                    type={this.state.showVerifyPassword ? "text" : "password"}
+                                    id="confirmPassword"
+                                    name="confirmPassword"
+                                    placeholder="Repita su contraseña"
+                                    value={this.state.form.confirmPassword}
+                                    onChange={this.handleChange}
+                                    required
+                                />
+                                <button
+                                    type="button"
+                                    onClick={this.toggleVerifyPasswordVisibility}
+                                    className="eye-button"
+                                >
+                                    <i className={this.state.showVerifyPassword ? 'fas fa-eye' : 'fas fa-eye-slash'}></i>
+                                </button>
                             </div>
-
                             <div className="terms">
-                            <input
+                                <input
                                     type="checkbox"
                                     id="terms"
                                     name="terms"
-                                    checked={this.state.acceptedTerms}
-                                    onChange={this.handleCheckboxChange}
                                     required
                                 />
                                 <label htmlFor="terms">
-                                    Acepto los <a href="/TermsAndConditions" target="_blank" rel="noopener noreferrer">términos y condiciones</a>
+                                    Acepto los <a href="/terms" target="_blank" rel="noopener noreferrer">términos y condiciones</a>
                                 </label>
                             </div>
-
                             {this.state.error && <p className="error">{this.state.error}</p>}
                             <div className="btn-enter">
-                            <button type="submit" className="btn">Registrarse</button>
+                                <button type="submit" className="btnlr">Registrarse</button>
                             </div>
                         </form>
                         <p>¿Ya tienes una cuenta? <Link to="/login">Inicia sesión aquí</Link></p>

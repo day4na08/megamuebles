@@ -3,6 +3,7 @@ import { Navigate } from 'react-router-dom';
 import UserProfile from '../components/UserProfile';
 import CreditCardTable from '../components/user/CreditCardTable';
 import ProductCrud from '../components/ProductCrud';
+import ProductCrud2 from '../components/productprueba';
 import '../css/UserPage.css';
 import NavBar from '../components/Navbar';
 import UserManagement from '../components/admin/UserManagement';
@@ -42,6 +43,8 @@ const AdminPage = () => {
             return <Compras />;
       case 'products':
         return <ProductCrud />;
+        case 'products2':
+          return <ProductCrud2 />;
       default:
         return <UserProfile />;
     }
@@ -63,6 +66,8 @@ const AdminPage = () => {
             <li onClick={() => setActiveTab('compras')}>Historial de Compras</li>
             <li onClick={() => setActiveTab('ventas')}>Historial de ventas</li>
             <li onClick={() => setActiveTab('products')}>Sus Productos</li>
+            <li onClick={() => setActiveTab('products2')}>Sus Productos2</li>
+
           </ul>
         </div>
         <div className="content">{renderContent()}</div>

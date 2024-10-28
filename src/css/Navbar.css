@@ -41,6 +41,10 @@ nav {
     height: 70px;
 }
 
+Link.link{
+    text-decoration:none;
+}
+
 
 /* Responsive styles */
 @media (max-width: 968px) {
