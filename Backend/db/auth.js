@@ -139,6 +139,78 @@ app.get("/llamarProductos",(req,res)=>{
     )    
 })
 
+
+app.get("/llamarProducto/:id", (req, res) => {
+    const id = req.params.id;
+
+    conexion.query('SELECT * FROM productos WHERE id = ?', [id], (err, result) => {
+        if (err) {
+            console.error("Error al obtener los datos del producto:", err);
+            return res.status(500).send('Error al obtener los datos del producto');
+        }
+        if (result.length === 0) {
+            return res.status(404).send('Producto no encontrado');
+        }
+        res.json(result[0]); // Enviar el primer producto encontrado
+    });
+});
+
+   
+app.delete('/deleteproductos/:id', (req, res) => {
+    const id  = req.params.id 
+
+    conexion.query('DELETE FROM productos WHERE id=? ',[id],
+
+    (err,result)=>{
+        if(err){
+            console.log(err);
+
+        }else{
+            res.send(result);
+        }
+    }
+    );
+});
+//actualizar productos :)
+app.put('/updateproductos', (req, res) => {
+    const name  = req.body.name 
+    const id  = req.body.id 
+    const material = req.body.material
+    const estilo = req.body.estilo
+    const tela = req.body.tela
+    const acabado = req.body.acabado
+    const color = req.body.color
+    const tapizMaterial = req.body.tapizMaterial
+    const materialInterno = req.body.materialInterno
+    const precio = req.body.precio
+    const descripcion = req.body.descripcion
+    const requiereArmado = req.body.requiereArmado
+    const alto = req.body.alto
+    const ancho = req.body.ancho
+    const profundidad = req.body.profundidad
+    const pesoNeto = req.body.pesoNeto
+    const cantidad = req.body.cantidad
+    const autor = req.body.autor
+    const imagen1 = req.body.imagen1
+    const imagen2 = req.body.imagen2
+    const imagen3 = req.body.imagen3
+    const imagen4 = req.body.imagen4
+    const imagen3D = req.body.imagen3D
+
+    
+    conexion.query('UPDATE productos SET name=?, material=?, estilo=?, tela=?, acabado=?, color=?, tapizMaterial=?, materialInterno=?, precio=?, descripcion=?, requiereArmado=?, alto=?, ancho=?, profundidad=?, pesoNeto=?, cantidad=?, autor=?, imagen1=?, imagen2=?, imagen3=?, imagen4=?, imagen3D=? WHERE id=? ',
+        [name, material, estilo, tela, acabado, color, tapizMaterial, materialInterno, precio, descripcion, requiereArmado, alto, ancho, profundidad, pesoNeto, cantidad, autor, imagen1, imagen2, imagen3, imagen4, imagen3D, id],
+
+    (err,result)=>{
+        if(err){
+            console.log(err);
+
+        }else{
+            res.send("Mueble actualizado satisfactoriamente :))");
+        }
+    }
+    );
+});
 // Ruta para agregar un nuevo producto2
 app.post('/productos2', (req, res) => {
     const { name, material, color, precio, descripcion, imagen3D } = req.body;

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Modal, Button, Form } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/UserProfile.css'
+import { Navigate } from 'react-router-dom';
 
 function UserProfile() {
   const [userData, setUserData] = useState(null);
@@ -101,7 +102,7 @@ function UserProfile() {
   }
 
   if (!userData) {
-    return <div>No user data available</div>;
+    return <div>No hay datos de usuario</div>;
   }
 
   return (

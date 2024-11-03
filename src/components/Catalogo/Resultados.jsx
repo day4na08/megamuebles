@@ -10,7 +10,7 @@ function Resultados({ filtros }) {
   useEffect(() => {
     const fetchProductos = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/products');
+        const response = await axios.get('http://localhost:3001/llamarProductos');
         const productosFiltrados = response.data.filter(producto => {
           const cumpleCategoria = !filtros.categoria || producto.categoria === filtros.categoria;
           const cumpleEstilo = !filtros.estilo || producto.estilo === filtros.estilo;
@@ -41,7 +41,7 @@ function Resultados({ filtros }) {
       <h3>Resultados de la Búsqueda</h3>
       <div className="resultados-grid">
         {productos.map(producto => {
-          const imagenPrincipal = producto.imagenes.imagen1 ? producto.imagenes.imagen1 : 'default-image-url';
+          const imagenPrincipal = producto.imagen1 ? producto.imagen1 : 'default-image-url';
           const precio = typeof producto.precio === 'number' ? producto.precio.toFixed(2) : 'N/A';
           return (
             <div className="producto-card" key={producto.id} onClick={() => handleProductoClick(producto)}>

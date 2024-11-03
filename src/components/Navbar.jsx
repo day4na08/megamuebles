@@ -22,7 +22,7 @@ const NavBar = () => {
     const navigate = useNavigate();
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null); // Estado para manejar errores
+    const [error, setError] = useState(null); 
 
     const userId = localStorage.getItem('userId'); // Obtener el userId de localStorage
 
@@ -72,9 +72,6 @@ const NavBar = () => {
         setIsDropdownOpen(!isDropdownOpen);
     };
 
-    const handleAccountRedirect = () => {
-        navigate('/user'); // Redirige a la página de cuenta del usuario
-    };
 
     const handleLogout = () => {
         // Limpia las cookies
@@ -136,7 +133,7 @@ const NavBar = () => {
                         </li>
                       <li className="list">
                         {isLoggedIn ? (
-                        <Link className="nav-link" onClick={handleAccountRedirect}>
+                        <Link className="nav-link" to="/user">
                         <i className="bx bx-user-circle icon">
                             <span className="link">
                             {userData && userData.username ? userData.username : 'Usuario'}
@@ -213,7 +210,7 @@ const NavBar = () => {
                         </li>
                         <li className="list">
                             {isLoggedIn ? (
-                              <Link className="nav-link" onClick={handleAccountRedirect}>
+                              <Link className="nav-link" to="/user">
                                 <i className="bx bx-user-circle icon">
                                   <span className="link"> Tu Cuenta</span>
                                 </i>

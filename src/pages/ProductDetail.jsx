@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import axios from 'axios';
+import Axios from 'axios';
 import { CartContext } from '../components/CartContext.jsx';
 import NavBar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -9,7 +9,6 @@ import '../css/ProductDetail.css';
 const ProductDetail = () => {
   const { id } = useParams();
   const [producto, setProducto] = useState(null);
-  const [productosSimilares, setProductosSimilares] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { addToCart } = useContext(CartContext);
@@ -17,18 +16,12 @@ const ProductDetail = () => {
   const [activeSection, setActiveSection] = useState('descripcion');
   const [selectedImage, setSelectedImage] = useState('');
 
-  const sketchfabModel = {
-    title: "Modelo Sketchfab",
-    iframeSrc: `https://sketchfab.com/models/${producto?.imagenes?.model3D}/embed`
-  };
-
   useEffect(() => {
     const fetchProducto = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/products/${id}`);
+        const response = await Axios.get(`http://localhost:3001/llamarProducto/${id}`);
         setProducto(response.data);
-        setSelectedImage(response.data.imagenes?.imagen1 || '');
-        fetchProductosSimilares(response.data.categoria);
+        setSelectedImage(response.data.imagen1 || '');
       } catch (error) {
         console.error('Error fetching product details:', error);
         setError('Failed to load product details. Please try again later.');
@@ -36,16 +29,6 @@ const ProductDetail = () => {
         setLoading(false);
       }
     };
-
-    const fetchProductosSimilares = async (categoria) => {
-      try {
-        const response = await axios.get(`http://localhost:3001/products?categoria=${categoria}`);
-        setProductosSimilares(response.data.filter(p => p.id !== id).slice(0, 4));
-      } catch (error) {
-        console.error('Error fetching similar products:', error);
-      }
-    };
-
     fetchProducto();
   }, [id]);
 
@@ -70,6 +53,7 @@ const ProductDetail = () => {
       <NavBar />
       <div className="container mt-5">
         <div className="row">
+          {/* Image and Thumbnails */}
           <div className="col-md-6">
             <div className="product-image">
               {selectedImage ? (
@@ -80,10 +64,10 @@ const ProductDetail = () => {
                 />
               ) : (
                 <iframe
-                  title={sketchfabModel.title}
+                  title="Modelo Sketchfab"
                   width="100%"
                   height="480"
-                  src={sketchfabModel.iframeSrc}
+                  src={`https://sketchfab.com/models/${producto.imagen3D}/embed`}
                   frameBorder="0"
                   allow="autoplay; fullscreen; vr"
                   allowFullScreen
@@ -91,8 +75,8 @@ const ProductDetail = () => {
               )}
             </div>
             <div className="mt-2 d-flex">
-              {Object.values(producto.imagenes || {})
-                .filter((img, index) => index < 4)
+              {[producto.imagen1, producto.imagen2, producto.imagen3, producto.imagen4]
+                .filter(img => img)
                 .map((img, index) => (
                   <img
                     key={index}
@@ -112,6 +96,8 @@ const ProductDetail = () => {
               </div>
             </div>
           </div>
+
+          {/* Product Info and Cart */}
           <div className="col-md-6">
             <h1>{producto.name}</h1>
             <p>{producto.descripcion}</p>
@@ -119,7 +105,7 @@ const ProductDetail = () => {
             <p><strong>Categoría:</strong> {producto.categoria}</p>
             <div className="d-flex align-items-center mb-3">
               <button className="btn btn-primary me-2" onClick={handleAddToCart}>Agregar al carrito</button>
-              <div className="input-group" style={{ width: '180px', padding:'10px'}}>
+              <div className="input-group" style={{ width: '180px', padding: '10px' }}>
                 <button
                   className="btn btn-outline-secondary"
                   onClick={() => setCantidad(Math.max(cantidad - 1, 1))}
@@ -140,6 +126,7 @@ const ProductDetail = () => {
           </div>
         </div>
 
+        {/* Product Details Sections */}
         <div className="my-4">
           <div className="btn-group" role="group">
             <button className="btn btn-outline-dark" onClick={() => showSection('descripcion')}>Descripción</button>
@@ -184,12 +171,13 @@ const ProductDetail = () => {
           </div>
         </div>
 
-        {/* <h2>Productos Similares</h2>
+        {/* Uncomment for Similar Products Section
+        <h2>Productos Similares</h2>
         <div className="row">
           {productosSimilares.map((simil, index) => (
-            <div key={index} className="col-md-50 mb-20">
+            <div key={index} className="col-md-4 mb-4">
               <div className="card">
-                <img src={simil.imagenes.imagen1} className="card-img-top" alt={simil.name} />
+                <img src={simil.imagen1} className="card-img-top" alt={simil.name} />
                 <div className="card-body">
                   <h5 className="card-title">{simil.name}</h5>
                   <p className="card-text">Precio: ${simil.precio.toFixed(2)}</p>
