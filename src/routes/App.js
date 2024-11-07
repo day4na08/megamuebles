@@ -50,7 +50,7 @@ function App() {
         <Route path="/Tendencias" element={<Tendencias />} />
         <Route path="/Ubicanos" element={<Ubicanos />} />
         <Route path="/Restablecer" element={<Restablecer />} />
-        <Route path="/restablecer/:token" element={<RestablecerContraseña />} />
+        <Route path="/reset-password/:token" element={<RestablecerContraseña />} />
         <Route path="/TermsAndConditions" element={<TermsAndConditions />} />
 
 

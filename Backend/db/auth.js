@@ -3,6 +3,7 @@ const app = express();
 const mysql = require('mysql');
 const md5 = require('md5');
 const cors = require('cors');
+const { sendResetEmail } = require('./testEmail'); // Importa la función
 
 app.use(express.json());
 app.use(cors());
@@ -229,8 +230,125 @@ app.post('/productos2', (req, res) => {
     );
 });
 
+//restablecer contraseña
+
+
+
+// Ruta para restablecer contraseña
+app.post('/api/password/reset', async (req, res) => {
+    const { email } = req.body;
+
+    const query = 'SELECT * FROM Usuarios WHERE email = ?';
+    conexion.query(query, [email], async (err, results) => {
+        if (err) {
+            console.error('Error en la base de datos:', err);
+            return res.status(500).send('Error en la base de datos');
+        }
+        if (results.length === 0) {
+            return res.status(404).send('Correo electrónico no encontrado');
+        }
+
+        const token = md5(email + Date.now());
+        const resetLink = `http://localhost:3000/reset-password/${token}`;
+
+        // Guardar el token en la base de datos
+        const updateTokenQuery = 'UPDATE Usuarios SET reset_token = ? WHERE email = ?';
+        conexion.query(updateTokenQuery, [token, email], async (err) => {
+            if (err) {
+                console.error('Error al guardar el token:', err);
+                return res.status(500).send('Error al guardar el token');
+            }
+
+            try {
+                await sendResetEmail(email, resetLink);
+                res.status(200).send('Se ha enviado un enlace para restablecer tu contraseña.');
+            } catch (error) {
+                console.error('Error al enviar el enlace de restablecimiento:', error);
+                res.status(500).send('Error al enviar el enlace de restablecimiento.');
+            }
+        });
+    });
+});
+
+// Ruta para verificar si el token es válido
+app.post('/api/password/verify-token/:token', (req, res) => {
+    const { token } = req.params;
+
+    if (!token) {
+        return res.status(400).send('Token no válido');
+    }
+
+    const query = 'SELECT * FROM Usuarios WHERE reset_token = ?';
+    conexion.query(query, [token], (err, results) => {
+        if (err) {
+            console.error('Error al verificar el token:', err);
+            return res.status(500).send('Error al verificar el token');
+        }
+        if (results.length === 0) {
+            return res.status(404).send('Token no válido o expirado');
+        }
+
+        // Si el token es válido, respondemos con un mensaje exitoso
+        res.status(200).send('Token válido');
+    });
+});
+
+// Ruta para restablecer la contraseña
+app.post('/api/password/reset/:token', (req, res) => {
+    const { token } = req.params;
+    const { nuevaContraseña } = req.body;
+
+    if (!token) {
+        return res.status(400).send('Token no válido');
+    }
+    if (!nuevaContraseña) {
+        return res.status(400).send('La nueva contraseña es requerida');
+    }
+
+    const query = 'SELECT * FROM Usuarios WHERE reset_token = ?';
+    conexion.query(query, [token], (err, results) => {
+        if (err) {
+            console.error('Error al verificar el token:', err);
+            return res.status(500).send('Error al verificar el token');
+        }
+        if (results.length === 0) {
+            return res.status(404).send('Token no válido o expirado');
+        }
+
+        const email = results[0].email;
+
+        if (nuevaContraseña.length < 6) {
+            return res.status(400).send('La contraseña debe tener al menos 6 caracteres.');
+        }
+
+        const hashedPassword = md5(nuevaContraseña);
+        const updatePasswordQuery = 'UPDATE Usuarios SET contrasena = ?, reset_token = NULL WHERE email = ?';
+        conexion.query(updatePasswordQuery, [hashedPassword, email], (err) => {
+            if (err) {
+                console.error('Error al actualizar la contraseña:', err);
+                return res.status(500).send('Error al actualizar la contraseña');
+            }
+
+            res.status(200).send('Contraseña actualizada con éxito');
+        });
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Inicia el servidor
 const PORT = 3001;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
+

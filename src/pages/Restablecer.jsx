@@ -8,13 +8,13 @@ function Restablecer() {
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('');
 
-  const handleSubmit = async (e) => {
+  const handleSendLink = async (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage('');
 
     try {
-      const response = await fetch('http://localhost:3002/restablecer', {
+      const response = await fetch('http://localhost:3001/api/password/reset', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -46,13 +46,13 @@ function Restablecer() {
     container: {
       display: 'flex',
       flexDirection: 'column',
-      minHeight: '100vh', // Asegura que ocupe toda la altura de la ventana
-      backgroundColor: '#f0f8ff', // Color de fondo suave
+      minHeight: '100vh',
+      backgroundColor: '#f0f8ff',
       padding: '20px',
       boxSizing: 'border-box',
     },
     content: {
-      flex: 1, // Permite que el contenido crezca y empuje el footer hacia abajo
+      flex: 1,
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
@@ -67,23 +67,8 @@ function Restablecer() {
       maxWidth: '450px',
       textAlign: 'center',
     },
-    title: {
-      fontSize: '28px',
-      color: '#333',
-      marginBottom: '20px',
-    },
-    instructions: {
-      marginBottom: '20px',
-      color: '#666',
-    },
     inputGroup: {
       marginBottom: '20px',
-    },
-    label: {
-      display: 'block',
-      fontWeight: '600',
-      marginBottom: '8px',
-      color: '#555',
     },
     input: {
       width: '100%',
@@ -109,14 +94,6 @@ function Restablecer() {
       marginTop: '20px',
       color: messageType === 'success' ? 'green' : 'red',
     },
-    option: {
-      marginTop: '15px',
-      color: '#666',
-    },
-    link: {
-      color: '#007bff',
-      textDecoration: 'none',
-    },
   };
 
   return (
@@ -124,16 +101,12 @@ function Restablecer() {
       <Navbar />
       <div style={styles.content}>
         <div style={styles.formContainer}>
-          <h1 style={styles.title}>Restablecer contraseña</h1>
-          <p style={styles.instructions}>
-            Ingrese su dirección de correo electrónico y le enviaremos un enlace para restablecer la contraseña.
-          </p>
-          <form onSubmit={handleSubmit}>
+          <h1>Restablecer contraseña</h1>
+          <form onSubmit={handleSendLink}>
             <div style={styles.inputGroup}>
-              <label style={styles.label} htmlFor="email">Correo electrónico</label>
+              <label>Correo electrónico</label>
               <input
                 type="email"
-                id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Dirección de correo electrónico"
@@ -141,24 +114,12 @@ function Restablecer() {
                 required
               />
             </div>
-            <button
-              type="submit"
-              style={styles.button}
-              disabled={loading}
-            >
-              {loading ? 'Enviando...' : 'ENVIAR ENLACE PARA RESTABLECER'}
+            <button type="submit" style={styles.button} disabled={loading}>
+              {loading ? 'Enviando...' : 'Enviar enlace'}
             </button>
           </form>
 
-          {message && (
-            <div style={styles.notification}>
-              {message}
-            </div>
-          )}
-
-          <p style={styles.option}>
-            ¿No necesita restablecer tu contraseña? <a href="/login" style={styles.link}>Iniciar sesión.</a>
-          </p>
+          {message && <div style={styles.notification}>{message}</div>}
         </div>
       </div>
       <Footer />

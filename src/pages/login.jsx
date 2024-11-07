@@ -151,7 +151,7 @@ class Login extends Component {
                                 {isLoading ? 'Cargando...' : 'Iniciar Sesión'}
                             </button>
                             </div>
-                            <p><Link to="/recover-password">¿Olvidaste tu contraseña?</Link></p>
+                            <p><Link to="/restablecer">¿Olvidaste tu contraseña?</Link></p>
                         </form>
                         <p>¿No tienes una cuenta? <Link to="/Register">Regístrate aquí</Link></p>
                     </div>

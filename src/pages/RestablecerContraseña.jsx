@@ -15,7 +15,10 @@ function RestablecerContraseña() {
   useEffect(() => {
     const verificarToken = async () => {
       try {
-        const response = await fetch(`http://localhost:3002/restablecer/${token}`);
+        const response = await fetch(`http://localhost:3001/api/password/verify-token/${token}`, {
+          method: 'POST',
+        });
+
         if (!response.ok) throw new Error('Token inválido o expirado');
         setMensaje('Token válido. Puede establecer una nueva contraseña.');
         setMensajeTipo('success');
@@ -33,7 +36,6 @@ function RestablecerContraseña() {
   const manejarSubmit = async (e) => {
     e.preventDefault();
 
-    // Validación de longitud de la nueva contraseña
     if (nuevaContraseña.length < 6) {
       setMensaje('La contraseña debe tener al menos 6 caracteres.');
       setMensajeTipo('error');
@@ -49,7 +51,7 @@ function RestablecerContraseña() {
     }
 
     try {
-      const response = await fetch(`http://localhost:3002/restablecer/${token}`, {
+      const response = await fetch(`http://localhost:3001/api/password/reset/${token}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -61,7 +63,6 @@ function RestablecerContraseña() {
       setMensaje('Contraseña restablecida con éxito.');
       setMensajeTipo('success');
 
-      // Redirigir a la página de login
       setTimeout(() => {
         navigate('/login');
       }, 1000);
@@ -80,7 +81,6 @@ function RestablecerContraseña() {
     }, 5000);
   };
 
-  // Estilos en objeto
   const estilos = {
     body: {
       fontFamily: 'Arial, sans-serif',
@@ -100,7 +100,7 @@ function RestablecerContraseña() {
       maxWidth: '450px',
       textAlign: 'center',
       margin: 'auto',
-      flexGrow: 1, // Permite que el contenedor crezca y empuje el footer hacia abajo
+      flexGrow: 1,
     },
     titulo: {
       marginBottom: '20px',
@@ -128,16 +128,11 @@ function RestablecerContraseña() {
       fontSize: '18px',
       transition: 'background-color 0.3s, color 0.3s',
     },
-    mensajeError: {
-      color: 'red',
-      marginTop: '10px',
-      fontWeight: 'bold',
-    },
   };
 
   return (
     <div style={estilos.body}>
-      <Navbar /> {/* Agregando la barra de navegación */}
+      <Navbar />
       <div style={estilos.contenedor}>
         <h1 style={estilos.titulo}>Restablecer Contraseña</h1>
         {mensaje && (
@@ -163,11 +158,11 @@ function RestablecerContraseña() {
               required
               style={estilos.input}
             />
-            <button type="submit" style={estilos.boton}>Restablecer Contraseña</button>
+            <button type="submit" style={estilos.boton}>Restablecer</button>
           </form>
         )}
       </div>
-      <Footer /> {/* Agregando el footer */}
+      <Footer />
     </div>
   );
 }
