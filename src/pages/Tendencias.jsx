@@ -98,8 +98,8 @@ const Tendencias = () => {
     <div className='rpmgl'>
       <section className="report-section">
         <div className="report-header">
-          <h2>Resumen de ventas</h2>
-          <p>Consulta los muebles más vendidos y las estadísticas de ventas</p>
+          <h2>Reportes de Unidades Vendidas</h2>
+          <p>Consulta los muebles más vendidos y las estadísticas de ventas </p>
         </div>
 
         <div className="report-cards">
