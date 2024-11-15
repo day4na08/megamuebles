@@ -5,6 +5,10 @@ const md5 = require('md5');
 const cors = require('cors');
 const { sendResetEmail } = require('./testEmail'); // Importa la función
 
+
+
+
+
 app.use(express.json());
 app.use(cors());
 
@@ -84,6 +88,92 @@ app.get('/users/:id', (req, res) => {
         }
     });
 });
+
+//CRUD usuarios
+app.post("/createUser",(req,res)=>{
+
+
+    const username = req.body.username;
+    const apellido = req.body.apellido;
+    const email = req.body.email;
+    const contrasena = req.body.contrasena;
+    const role = req.body.role;
+    
+    
+    conexion.query('INSERT INTO usuarios(username,apellido,email,contrasena,role) VALUES(?,?,?,?,?)',[username,apellido,email,contrasena,role],
+        (err,result)=>{
+        if(err){
+        console.log(err);
+        }else{
+        res.send("Usuario registrado con éxito!!");
+    }
+    }
+    )
+});
+
+
+//actualizar
+app.put("/updateUser",(req,res)=>{
+
+
+    const username = req.body.username;
+    const id = req.body.id;
+    const apellido = req.body.apellido;
+    const email = req.body.email;
+    const contrasena = req.body.contrasena;
+    const role = req.body.role;
+    
+    
+    conexion.query('UPDATE usuarios SET username=?, apellido=?,email=?,contrasena=?,role=?,  WHERE id=?, ',
+        [username,apellido,email,contrasena,role,id],
+        (err,result)=>{
+        if(err){
+        console.log(err);
+        }else{
+        res.send("Usuario registrado con éxito!!");
+    }
+    }
+    )
+});
+
+//CRUD usuarios
+app.post("/deleteUser",(req,res)=>{
+
+    const id  = req.params.id 
+
+    conexion.query('DELETE FROM usuarios WHERE id=? ',[id],
+
+    (err,result)=>{
+        if(err){
+            console.log(err);
+
+        }else{
+            res.send(result);
+        }
+    }
+    );
+});
+
+
+
+
+app.get("/registrados",(req,res)=>{
+    
+    conexion.query('SELECT * FROM usuarios',
+        (err,result)=>{
+        if(err){
+        console.log(err);
+        }else{
+        res.send(result);
+    }
+    }
+    )
+});
+
+
+
+
+
 
 
 

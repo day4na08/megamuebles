@@ -91,7 +91,7 @@ const ProductCrud = () => {
           showCancelButton: true,
           confirmButtonText: "Aceptar",
           cancelButtonText: "Cancelar",
-          reverseButtons: true
+          reverseButtons: true   
         }).then((result) => {
           if (result.isConfirmed) {
             Axios.delete(`http://localhost:3001/deleteproductos/${val.id}`).then(() => {
@@ -118,9 +118,6 @@ const ProductCrud = () => {
         });
       };
       
-        
-    
-
     const cancel =()=> {
         setEditar(false)
 

@@ -1,157 +1,255 @@
-import '../../css/UserManagement.css';
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Modal, Button, Form } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css'; 
+import Axios from "axios";
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+
 
 function UserManagement() {
-  const [users, setUsers] = useState([]);
-  const [newUser, setNewUser] = useState({ username: '', email: '', role: '' });
-  const [editingUser, setEditingUser] = useState(null);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [username, setUsername] = useState("");
+  const [apellido, setApellido] = useState("");
+  const [email, setEmail] = useState("");
+  const [contrasena, setContrasena] = useState("");
+  const [role, setRole] = useState("");
+  const [usuariosList, setUsuarios] = useState([]);
+  const [editar, setEditar] = useState (false);
+  const [id, setId]= useState([]);
+  const [eliminar, setEliminar] = useState ([]);
+  const noti = withReactContent(Swal)
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get('http://localhost:3001/users');
-        setUsers(response.data);
-      } catch (error) {
-        console.error('Error fetching users:', error);
+
+
+  const addUser = () => {
+    Axios.post("http://localhost:3001/createUser", {
+      username: username,
+      apellido: apellido,
+      email: email,
+      contrasena: contrasena,
+      role: role
+    }).then(() => {
+      getRegistrados();
+      alert("Usuario registrado");
+    });
+  }
+
+
+  
+  const usuarioDelete = (val) => {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: "btn btn-success",
+        cancelButton: "btn btn-danger"
+      },
+      buttonsStyling: false
+    });
+  
+    swalWithBootstrapButtons.fire({
+      title: "Estas seguro?",
+      html: "<p>Quieres eliminar el mueble <strong>"+ val.username +"</strong>?</p>",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Aceptar",
+      cancelButtonText: "Cancelar",
+      reverseButtons: true   
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Axios.delete(`http://localhost:3001/deleteUser/${val.id}`).then(() => {
+          getRegistrados(); // Recargar la lista de productos
+            cancel(); // Cancelar cualquier acción adicional si es necesario
+            noti.fire({
+              title: "Eliminado!",
+              html: "<p>El mueble <strong>"+val.username+"</strong> fue eliminado satisfactoriamente</p>",
+              icon: "success",
+              timer:3000
+            });
+          })
+          .catch((error) => {
+            console.error("Error eliminando producto:", error);
+            Swal.fire("Error", "There was an issue deleting the product.", "error");
+          });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        swalWithBootstrapButtons.fire({
+          title: "Cancelado",
+          html: "<p>El mueble <strong>"+ val.username +"</strong> no fue eliminado</p>",
+          icon: "error"
+        });
       }
-    };
-
-    fetchUsers();
-  }, []);
-
-  const handleChange = (e) => {
-    setNewUser({
-      ...newUser,
-      [e.target.name]: e.target.value,
     });
   };
+  
+const cancel =()=> {
+    setEditar(false)
+    setUsername("");
+    setApellido("");
+    setEmail("");
+    setContrasena("");
+    setRole("");
+    setId("");
 
-  const handleAddUser = async () => {
-    try {
-      const response = await axios.post('http://localhost:3001/users', newUser);
-      setUsers([...users, response.data]);
-      closeModal();
-    } catch (error) {
-      console.error('Error adding user:', error);
-    }
-  };
 
-  const handleDeleteUser = async (userId) => {
-    try {
-      await axios.delete(`http://localhost:3001/users/${userId}`);
-      setUsers(users.filter(user => user.id !== userId));
-    } catch (error) {
-      console.error('Error deleting user:', error);
-    }
-  };
+}
 
-  const handleEditUser = async (userId, updatedUser) => {
-    try {
-      await axios.put(`http://localhost:3001/users/${userId}`, updatedUser);
-      setUsers(users.map(user => (user.id === userId ? updatedUser : user)));
-      closeModal();
-    } catch (error) {
-      console.error('Error editing user:', error);
-    }
-  };
+const update =()=> {
+    Axios.put("http://localhost:3001/updateUser",{
+    id:id,
+    username:username,
+    apellido:apellido,
+    email:email,
+    contrasena:contrasena,
+    role:role
+    }).then(()=>{
+      getRegistrados();
+    cancel();
+    noti.fire({
+        title: "Muy Bien!",
+        text: "El mueble "+username+" fue actualizado  satisfactoriamente",
+        icon: "success",
+        timer: 3000
+      });
+})
+}
+const editarUsuario =(val)=>{
+    setEditar(true)
 
-  const openModal = (user = null) => {
-    if (user) {
-      setEditingUser(user);
-      setNewUser({ ...user });
-    } else {
-      setEditingUser(null);
-      setNewUser({ username: '', email: '', role: '' });
-    }
-    setModalIsOpen(true);
-  };
+    setUsername(val.username);
+    setApellido(val.apellido);
+    setEmail(val.email);
+    setContrasena(val.contrasena);
+    setRole(val.role);
+    setId(val.id);
+    
+}
 
-  const closeModal = () => {
-    setModalIsOpen(false);
-  };
+
+  const getRegistrados = () => {
+    Axios.get("http://localhost:3001/registrados").then((response) => {
+      setUsuarios(response.data);
+    });
+  }
+  useEffect(() => {
+    getRegistrados(); // Llama la lista de productos cuando el componente carga
+}, []);
 
   return (
-    <div>
-      <h2>Gestión de Usuarios</h2>
-      <table className="user-table">
-        <thead>
-          <tr>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Rol</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map(user => (
-            <tr key={user.id}>
-              <td>{user.username}</td>
-              <td>{user.email}</td>
-              <td>{user.role}</td>
-              <td>
-                <Button variant="primary" onClick={() => openModal(user)}>Editar</Button>
-                <Button variant="danger" onClick={() => handleDeleteUser(user.id)}>Eliminar</Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <Button variant="success" onClick={() => openModal()}>Agregar Nuevo Usuario</Button>
+    <div className="container">
+         
 
-      <Modal show={modalIsOpen} onHide={closeModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>{editingUser ? 'Editar Usuario' : 'Agregar Nuevo Usuario'}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group controlId="formUsername">
-              <Form.Label>Nombre de usuario</Form.Label>
-              <Form.Control
+        <div className="card text-center" style={{ maxWidth: '400px', margin: '0 auto', padding: '0px' }}>
+          <div className="card-header">
+            <h5 className="mb-0">Gestión de usuarios</h5>
+          </div>
+
+          <div className="card-body">
+            <div className="input-group mb-3">
+              <span className="input-group-text" style={{ width: '120px', justifyContent: 'center' }}>Nombre</span>
+              <input 
                 type="text"
-                name="username"
-                placeholder="Nombre de usuario"
-                value={newUser.username}
-                onChange={handleChange}
+                onChange={(event) => setUsername(event.target.value)}
+                className="form-control" 
+                placeholder="Ingrese un nombre" 
+                aria-label="Username" 
+                style={{ height: '45px', minWidth: '240px' }}
               />
-            </Form.Group>
-            <Form.Group controlId="formEmail">
-              <Form.Label>Email</Form.Label>
-              <Form.Control
+            </div>
+
+            <div className="input-group mb-3">
+              <span className="input-group-text" style={{ width: '120px', justifyContent: 'center' }}>Apellido</span>
+              <input 
+                type="text"
+                onChange={(event) => setApellido(event.target.value)}
+                className="form-control" 
+                placeholder="Ingrese un apellido" 
+                aria-label="Apellido" 
+                style={{ height: '45px', minWidth: '240px' }}
+              />
+            </div>
+
+            <div className="input-group mb-3">
+              <span className="input-group-text" style={{ width: '120px', justifyContent: 'center' }}>Email</span>
+              <input 
                 type="email"
-                name="email"
-                placeholder="Email"
-                value={newUser.email}
-                onChange={handleChange}
+                onChange={(event) => setEmail(event.target.value)}
+                className="form-control"
+                placeholder="Ingrese un email"
+                style={{ height: '45px', minWidth: '240px' }}
               />
-            </Form.Group>
-            <Form.Group controlId="formRole">
-              <Form.Label>Rol</Form.Label>
-              <Form.Control
+            </div>
+
+            <div className="input-group mb-3">
+              <span className="input-group-text" style={{ width: '120px', justifyContent: 'center' }}>Contraseña</span>
+              <input 
+                type="password"
+                onChange={(event) => setContrasena(event.target.value)}
+                className="form-control"
+                placeholder="Ingrese una contraseña"
+                style={{ height: '45px', minWidth: '240px' }}
+              />
+            </div>
+
+            <div className="input-group mb-3">
+              <span className="input-group-text" style={{ width: '120px', justifyContent: 'center' }}>Role</span>
+              <input 
                 type="text"
-                name="role"
-                placeholder="Rol"
-                value={newUser.role}
-                onChange={handleChange}
+                onChange={(event) => setRole(event.target.value)}
+                className="form-control"
+                placeholder="Ingrese un rol"
+                style={{ height: '45px', minWidth: '240px' }}
               />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={closeModal}>
-            Cerrar
-          </Button>
-          <Button
-            variant="primary"
-            onClick={editingUser ? () => handleEditUser(editingUser.id, newUser) : handleAddUser}
-          >
-            {editingUser ? 'Actualizar' : 'Agregar'}
-          </Button>
-        </Modal.Footer>
-      </Modal>
+            </div>
+          </div>
+          <div className="card-footer">
+                {
+                    editar? 
+                    <div> 
+                        <button onClick={update}>actualizar</button>
+                        <button onClick={cancel}>cancelar</button>
+                    </div>
+                    :<button onClick={addUser}>Registar</button>
+                }
+
+                </div>
+
+
+
+      <table class="table table-striped">
+          <thead> 
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Apellido</th>
+              <th scope="col">Email</th>
+              <th scope="col">Contraseña</th>
+              <th scope="col">Rol</th>
+            </tr>
+          </thead>
+          <tbody>
+
+          {usuariosList.map((val, key) => (
+           
+           <tr key={val.id}>
+           <th scope="row">{val.id}</th>
+           <td>{val.username}</td>
+           <td>{val.apellido}</td>
+           <td>{val.email}</td>
+           <td>{val.contrasena}</td>
+           <td>{val.role}</td>
+           <td>                
+              <button onClick={()=>{
+               editarUsuario(val)
+               }}>editar</button>
+
+              <button onClick={()=>{
+               usuarioDelete(val);
+               }}>Eliminar</button>
+          </td>
+         </tr>
+          ))}
+
+           
+            
+          </tbody>
+          </table>                
+          </div> 
+
     </div>
   );
 }

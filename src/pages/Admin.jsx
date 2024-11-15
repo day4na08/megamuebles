@@ -14,6 +14,7 @@ import Compras from '../components/user/Compras';
 
 const cookies = new Cookies();
 
+
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState('info');
   const [isAuthenticated, setIsAuthenticated] = useState(true);
@@ -72,7 +73,10 @@ const AdminPage = () => {
         </div>
         <div className="content">{renderContent()}</div>
       </div>
+      
     </div>
+
+   
   );
 };
 

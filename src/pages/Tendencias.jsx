@@ -119,7 +119,8 @@ const Tendencias = () => {
           </div>
 
           <div className="card">
-            <h3>Ganancias totales</h3>
+            <h3>unidades vendidas
+            </h3>
             <Line data={lineData} options={{ responsive: true }} />
             <p className="trend-indicator">▲ $10,000 (+2%)</p>
             <p><strong>$350,000</strong> en el último mes</p>
