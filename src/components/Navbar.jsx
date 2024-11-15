@@ -205,7 +205,7 @@ const NavBar = () => {
                         <li className="list">
                             <Link to="/Catalog" className="nav-link">
                                 <i className='bx bx-store icon'></i>
-                                <span className="link">Catalogo</span>
+                                <span className="link">Catálogo</span>
                             </Link>
                         </li>
                         <li className="list">
