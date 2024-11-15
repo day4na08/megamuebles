@@ -105,7 +105,7 @@ app.post("/createUser",(req,res)=>{
         if(err){
         console.log(err);
         }else{
-        res.send("Usuario registrado con éxito!!");
+        res.send("Usuario registrado con éxitto!!");
     }
     }
     )
