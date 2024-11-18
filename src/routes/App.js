@@ -22,8 +22,6 @@ import Restablecer from "../pages/Restablecer.jsx";
 import RestablecerContraseña from "../pages/RestablecerContraseña.jsx";
 import TermsAndConditions from "../components/TermsAndConditions";
 
-
-
 function App() {
   return (
     <CartProvider>
@@ -49,24 +47,6 @@ function App() {
         <Route path="/Restablecer" element={<Restablecer />} />
         <Route path="/reset-password/:token" element={<RestablecerContraseña />} />
         <Route path="/TermsAndConditions" element={<TermsAndConditions />} />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       </Routes>
     </Router>
     </CartProvider>
