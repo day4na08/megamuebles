@@ -3,20 +3,16 @@ const app = express();
 const mysql = require('mysql');
 const md5 = require('md5');
 const cors = require('cors');
-const { sendResetEmail } = require('./testEmail'); // Importa la función
-
-
-
-
+const { sendResetEmail } = require('../testEmail'); // Importa la función
 
 app.use(express.json());
 app.use(cors());
 
 const conexion = mysql.createConnection({
-    host:"localhost",
-    database:"megamueblesdb",
-    user:"root",
-    password: ""
+    host:"bophiqaqn7njcq914abj-mysql.services.clever-cloud.com",
+    database:"bophiqaqn7njcq914abj",
+    user:"ut5fkytyx472ncxy",
+    password: "oOzIqyORHac6JjwuQjdI"
 });
 
 conexion.connect(err => {
@@ -33,7 +29,7 @@ app.post('/register', (req, res) => {
     const { username, apellido, email, password, role } = req.body;
 
     // Verificar si el email ya existe
-    const checkUserQuery = 'SELECT * FROM Usuarios WHERE email = ?';
+    const checkUserQuery = 'SELECT * FROM usuarios WHERE email = ?';
     conexion.query(checkUserQuery, [email], (err, results) => {
         if (err) return res.status(500).send('Error en la base de datos');
         if (results.length > 0) {
@@ -42,7 +38,7 @@ app.post('/register', (req, res) => {
 
         // Si no existe, insertar el nuevo usuario
         const hashedPassword = md5(password);
-        const insertUserQuery = 'INSERT INTO Usuarios (username, apellido, email, contrasena, role) VALUES (?, ?, ?, ?, ?)';
+        const insertUserQuery = 'INSERT INTO usuarios (username, apellido, email, contrasena, role) VALUES (?, ?, ?, ?, ?)';
         conexion.query(insertUserQuery, [username, apellido, email, hashedPassword, role], (err) => {
             if (err) return res.status(500).send('Error al registrar usuario');
             res.status(201).send('Usuario registrado con éxito');
@@ -55,7 +51,7 @@ app.post('/login', (req, res) => {
     const { email, password } = req.body;
     const hashedPassword = md5(password);
 
-    const query = 'SELECT * FROM Usuarios WHERE email = ? AND contrasena = ?';
+    const query = 'SELECT * FROM usuarios WHERE email = ? AND contrasena = ?';
     conexion.query(query, [email, hashedPassword], (err, results) => {
         if (err) throw err;
         if (results.length > 0) {
@@ -76,7 +72,7 @@ app.post('/login', (req, res) => {
 app.get('/users/:id', (req, res) => {
     const userId = req.params.id;
 
-    const query = 'SELECT * FROM Usuarios WHERE id = ?';
+    const query = 'SELECT * FROM usuarios WHERE id = ?';
     conexion.query(query, [userId], (err, results) => {
         if (err) {
             return res.status(500).send('Error al obtener los datos del usuario');
@@ -88,92 +84,6 @@ app.get('/users/:id', (req, res) => {
         }
     });
 });
-
-//CRUD usuarios
-app.post("/createUser",(req,res)=>{
-
-
-    const username = req.body.username;
-    const apellido = req.body.apellido;
-    const email = req.body.email;
-    const contrasena = req.body.contrasena;
-    const role = req.body.role;
-    
-    
-    conexion.query('INSERT INTO usuarios(username,apellido,email,contrasena,role) VALUES(?,?,?,?,?)',[username,apellido,email,contrasena,role],
-        (err,result)=>{
-        if(err){
-        console.log(err);
-        }else{
-        res.send("Usuario registrado con éxitto!!");
-    }
-    }
-    )
-});
-
-
-//actualizar
-app.put("/updateUser",(req,res)=>{
-
-
-    const username = req.body.username;
-    const id = req.body.id;
-    const apellido = req.body.apellido;
-    const email = req.body.email;
-    const contrasena = req.body.contrasena;
-    const role = req.body.role;
-    
-    
-    conexion.query('UPDATE usuarios SET username=?, apellido=?,email=?,contrasena=?,role=?,  WHERE id=?, ',
-        [username,apellido,email,contrasena,role,id],
-        (err,result)=>{
-        if(err){
-        console.log(err);
-        }else{
-        res.send("Usuario registrado con éxito!!");
-    }
-    }
-    )
-});
-
-//CRUD usuarios
-app.post("/deleteUser",(req,res)=>{
-
-    const id  = req.params.id 
-
-    conexion.query('DELETE FROM usuarios WHERE id=? ',[id],
-
-    (err,result)=>{
-        if(err){
-            console.log(err);
-
-        }else{
-            res.send(result);
-        }
-    }
-    );
-});
-
-
-
-
-app.get("/registrados",(req,res)=>{
-    
-    conexion.query('SELECT * FROM usuarios',
-        (err,result)=>{
-        if(err){
-        console.log(err);
-        }else{
-        res.send(result);
-    }
-    }
-    )
-});
-
-
-
-
-
 
 
 
@@ -423,18 +333,6 @@ app.post('/api/password/reset/:token', (req, res) => {
         });
     });
 });
-
-
-
-
-
-
-
-
-
-
-
-
 
 // Inicia el servidor
 const PORT = 3001;
