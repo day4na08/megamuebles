@@ -1,18 +1,21 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const mysql = require('mysql');
 const md5 = require('md5');
 const cors = require('cors');
 const { sendResetEmail } = require('./testEmail'); // Importa la función
+const PORT = process.env.PORT || 3001;
 
 app.use(express.json());
 app.use(cors());
 
 const conexion = mysql.createConnection({
-    host:"bophiqaqn7njcq914abj-mysql.services.clever-cloud.com",
-    database:"bophiqaqn7njcq914abj",
-    user:"ut5fkytyx472ncxy",
-    password: "oOzIqyORHac6JjwuQjdI"
+    host: process.env.DB_HOST || "bophiqaqn7njcq914abj-mysql.services.clever-cloud.com",
+    port: process.env.DB_PORT || "3306", 
+    database: process.env.DB_NAME || "bophiqaqn7njcq914abj",
+    user: process.env.DB_USER || "ut5fkytyx472ncxy",
+    password: process.env.DB_PASSWORD || "oOzIqyORHac6JjwuQjdI"
 });
 
 conexion.connect(err => {
@@ -421,7 +424,6 @@ app.post('/api/password/reset/:token', (req, res) => {
 });
 
 // Inicia el servidor
-const PORT = 3001;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
