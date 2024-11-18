@@ -3,7 +3,7 @@ const app = express();
 const mysql = require('mysql');
 const md5 = require('md5');
 const cors = require('cors');
-const { sendResetEmail } = require('../testEmail'); // Importa la función
+const { sendResetEmail } = require('./testEmail'); // Importa la función
 
 app.use(express.json());
 app.use(cors());
