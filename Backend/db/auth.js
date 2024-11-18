@@ -85,6 +85,92 @@ app.get('/users/:id', (req, res) => {
     });
 });
 
+//CRUD usuarios
+app.post("/createUser",(req,res)=>{
+
+
+    const username = req.body.username;
+    const apellido = req.body.apellido;
+    const email = req.body.email;
+    const contrasena = req.body.contrasena;
+    const role = req.body.role;
+
+
+    conexion.query('INSERT INTO usuarios(username,apellido,email,contrasena,role) VALUES(?,?,?,?,?)',[username,apellido,email,contrasena,role],
+        (err,result)=>{
+        if(err){
+        console.log(err);
+        }else{
+        res.send("Usuario registrado con éxito!!");
+    }
+    }
+    )
+});
+
+
+//actualizar
+app.put("/updateUser",(req,res)=>{
+
+
+    const username = req.body.username;
+    const id = req.body.id;
+    const apellido = req.body.apellido;
+    const email = req.body.email;
+    const contrasena = req.body.contrasena;
+    const role = req.body.role;
+
+
+    conexion.query('UPDATE usuarios SET username=?, apellido=?,email=?,contrasena=?,role=? WHERE id=? ',
+        [username,apellido,email,contrasena,role,id],
+        (err,result)=>{
+        if(err){
+        console.log(err);
+        }else{
+        res.send("Usuario registrado con éxito!!");
+    }
+    }
+    )
+});
+
+//CRUD usuarios
+app.delete('/deleteUser/:id',(req,res)=>{
+
+    const id  = req.params.id 
+
+    conexion.query('DELETE FROM usuarios WHERE id=? ',[id],
+
+    (err,result)=>{
+        if(err){
+            console.log(err);
+
+        }else{
+            res.send(result);
+        }
+    }
+    );
+});
+
+
+
+
+app.get("/registrados",(req,res)=>{
+
+    conexion.query('SELECT * FROM usuarios',
+        (err,result)=>{
+        if(err){
+        console.log(err);
+        }else{
+        res.send(result);
+    }
+    }
+    )
+});
+
+
+
+
+
+
 
 
 // Ruta para agregar un nuevo producto
@@ -156,7 +242,7 @@ app.get("/llamarProducto/:id", (req, res) => {
     });
 });
 
-   
+
 app.delete('/deleteproductos/:id', (req, res) => {
     const id  = req.params.id 
 
@@ -198,7 +284,7 @@ app.put('/updateproductos', (req, res) => {
     const imagen4 = req.body.imagen4
     const imagen3D = req.body.imagen3D
 
-    
+
     conexion.query('UPDATE productos SET name=?, material=?, estilo=?, tela=?, acabado=?, color=?, tapizMaterial=?, materialInterno=?, precio=?, descripcion=?, requiereArmado=?, alto=?, ancho=?, profundidad=?, pesoNeto=?, cantidad=?, autor=?, imagen1=?, imagen2=?, imagen3=?, imagen4=?, imagen3D=? WHERE id=? ',
         [name, material, estilo, tela, acabado, color, tapizMaterial, materialInterno, precio, descripcion, requiereArmado, alto, ancho, profundidad, pesoNeto, cantidad, autor, imagen1, imagen2, imagen3, imagen4, imagen3D, id],
 
@@ -238,7 +324,7 @@ app.post('/productos2', (req, res) => {
 app.post('/api/password/reset', async (req, res) => {
     const { email } = req.body;
 
-    const query = 'SELECT * FROM Usuarios WHERE email = ?';
+    const query = 'SELECT * FROM usuarios WHERE email = ?';
     conexion.query(query, [email], async (err, results) => {
         if (err) {
             console.error('Error en la base de datos:', err);
@@ -252,7 +338,7 @@ app.post('/api/password/reset', async (req, res) => {
         const resetLink = `http://localhost:3000/reset-password/${token}`;
 
         // Guardar el token en la base de datos
-        const updateTokenQuery = 'UPDATE Usuarios SET reset_token = ? WHERE email = ?';
+        const updateTokenQuery = 'UPDATE usuarios SET reset_token = ? WHERE email = ?';
         conexion.query(updateTokenQuery, [token, email], async (err) => {
             if (err) {
                 console.error('Error al guardar el token:', err);
@@ -278,7 +364,7 @@ app.post('/api/password/verify-token/:token', (req, res) => {
         return res.status(400).send('Token no válido');
     }
 
-    const query = 'SELECT * FROM Usuarios WHERE reset_token = ?';
+    const query = 'SELECT * FROM usuarios WHERE reset_token = ?';
     conexion.query(query, [token], (err, results) => {
         if (err) {
             console.error('Error al verificar el token:', err);
@@ -305,7 +391,7 @@ app.post('/api/password/reset/:token', (req, res) => {
         return res.status(400).send('La nueva contraseña es requerida');
     }
 
-    const query = 'SELECT * FROM Usuarios WHERE reset_token = ?';
+    const query = 'SELECT * FROM usuarios WHERE reset_token = ?';
     conexion.query(query, [token], (err, results) => {
         if (err) {
             console.error('Error al verificar el token:', err);
@@ -322,7 +408,7 @@ app.post('/api/password/reset/:token', (req, res) => {
         }
 
         const hashedPassword = md5(nuevaContraseña);
-        const updatePasswordQuery = 'UPDATE Usuarios SET contrasena = ?, reset_token = NULL WHERE email = ?';
+        const updatePasswordQuery = 'UPDATE usuarios SET contrasena = ?, reset_token = NULL WHERE email = ?';
         conexion.query(updatePasswordQuery, [hashedPassword, email], (err) => {
             if (err) {
                 console.error('Error al actualizar la contraseña:', err);
@@ -339,4 +425,3 @@ const PORT = 3001;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
-

@@ -37,43 +37,51 @@ function UserManagement() {
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: "btn btn-success",
-        cancelButton: "btn btn-danger"
+        cancelButton: "btn btn-danger",
       },
-      buttonsStyling: false
+      buttonsStyling: false,
     });
   
-    swalWithBootstrapButtons.fire({
-      title: "Estas seguro?",
-      html: "<p>Quieres eliminar el mueble <strong>"+ val.username +"</strong>?</p>",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Aceptar",
-      cancelButtonText: "Cancelar",
-      reverseButtons: true   
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Axios.delete(`http://localhost:3001/deleteUser/${val.id}`).then(() => {
-          getRegistrados(); // Recargar la lista de productos
-            cancel(); // Cancelar cualquier acción adicional si es necesario
-            noti.fire({
-              title: "Eliminado!",
-              html: "<p>El mueble <strong>"+val.username+"</strong> fue eliminado satisfactoriamente</p>",
-              icon: "success",
-              timer:3000
+    swalWithBootstrapButtons
+      .fire({
+        title: "¿Estás seguro?",
+        html: `<p>¿Quieres eliminar al Usuario: <strong>${val.username}</strong>?</p>`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Aceptar",
+        cancelButtonText: "Cancelar",
+        reverseButtons: true,
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          Axios.delete(`http://localhost:3001/deleteUser/${val.id}`).then(() => {
+              swalWithBootstrapButtons.fire({
+                title: "¡Eliminado!",
+                html: `<p>El Usuario: <strong>${val.username}</strong> fue eliminado satisfactoriamente</p>`,
+                icon: "success",
+                timer: 3000,
+              });
+              getRegistrados(); // Recargar la lista de usuarios
+              cancel(); 
+            })
+            .catch((error) => {
+              console.error("Error eliminando usuario:", error);
+              Swal.fire("Error", "No pudimos eliminar el usuario", "error");
             });
-          })
-          .catch((error) => {
-            console.error("Error eliminando producto:", error);
-            Swal.fire("Error", "There was an issue deleting the product.", "error");
+            getRegistrados(); // Recargar la lista de usuarios
+            cancel(); 
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          swalWithBootstrapButtons.fire({
+            title: "Cancelado",
+            html: `<p>El Usuario <strong>${val.username}</strong> no fue eliminado</p>`,
+            icon: "error",
           });
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        swalWithBootstrapButtons.fire({
-          title: "Cancelado",
-          html: "<p>El mueble <strong>"+ val.username +"</strong> no fue eliminado</p>",
-          icon: "error"
-        });
-      }
-    });
+          getRegistrados(); // Recargar la lista de usuarios
+          cancel(); 
+        }
+        getRegistrados(); // Recargar la lista de usuarios
+        cancel(); 
+      });
   };
   
 const cancel =()=> {
@@ -97,14 +105,15 @@ const update =()=> {
     contrasena:contrasena,
     role:role
     }).then(()=>{
-      getRegistrados();
-    cancel();
     noti.fire({
         title: "Muy Bien!",
-        text: "El mueble "+username+" fue actualizado  satisfactoriamente",
+        text: "Los datos del Usuario "+username+" fueron actualizados satisfactoriamente",
         icon: "success",
         timer: 3000
+        
       });
+      getRegistrados();
+      cancel();
 })
 }
 const editarUsuario =(val)=>{
@@ -142,6 +151,7 @@ const editarUsuario =(val)=>{
             <div className="input-group mb-3">
               <span className="input-group-text" style={{ width: '120px', justifyContent: 'center' }}>Nombre</span>
               <input 
+                value={username}
                 type="text"
                 onChange={(event) => setUsername(event.target.value)}
                 className="form-control" 
@@ -154,6 +164,7 @@ const editarUsuario =(val)=>{
             <div className="input-group mb-3">
               <span className="input-group-text" style={{ width: '120px', justifyContent: 'center' }}>Apellido</span>
               <input 
+                value={apellido}
                 type="text"
                 onChange={(event) => setApellido(event.target.value)}
                 className="form-control" 
@@ -166,6 +177,7 @@ const editarUsuario =(val)=>{
             <div className="input-group mb-3">
               <span className="input-group-text" style={{ width: '120px', justifyContent: 'center' }}>Email</span>
               <input 
+                value={email}
                 type="email"
                 onChange={(event) => setEmail(event.target.value)}
                 className="form-control"
@@ -177,6 +189,7 @@ const editarUsuario =(val)=>{
             <div className="input-group mb-3">
               <span className="input-group-text" style={{ width: '120px', justifyContent: 'center' }}>Contraseña</span>
               <input 
+                value={contrasena}
                 type="password"
                 onChange={(event) => setContrasena(event.target.value)}
                 className="form-control"
@@ -188,6 +201,7 @@ const editarUsuario =(val)=>{
             <div className="input-group mb-3">
               <span className="input-group-text" style={{ width: '120px', justifyContent: 'center' }}>Role</span>
               <input 
+                value={role}
                 type="text"
                 onChange={(event) => setRole(event.target.value)}
                 className="form-control"
