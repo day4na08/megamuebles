@@ -10,7 +10,7 @@ const PhoneTable = ({ userId }) => {
   useEffect(() => {
     const fetchPhones = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/users/${userId}/phones`);
+        const response = await axios.get(`http://localhost:5001/users/${userId}/phones`);
         setPhones(response.data);
       } catch (error) {
         console.error("Error fetching phones:", error);

@@ -406,10 +406,12 @@ const ProductCrud = () => {
 
                 </div>
                 
- 
+        
             </div>
+            
             <div className="productos">
             {/* Tabla CRUD */}
+            
             <div className="tabla-crud">
                 <h2>Lista de Muebles</h2>
                 <table className="table table-bordered">
@@ -451,8 +453,8 @@ const ProductCrud = () => {
                     </tbody>
                 </table>
             </div>
-        </div>
-        </div>
+            </div>
+            </div>
     );
 };
 

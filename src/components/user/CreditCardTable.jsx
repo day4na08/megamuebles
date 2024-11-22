@@ -29,7 +29,7 @@ const CreditCardTable = ({ userId }) => {
           throw new Error('No se encontró ID de usuario');
         }
 
-        const response = await axios.get(`http://localhost:3001/users/${userId}`);
+        const response = await axios.get(`http://localhost:5001/users/${userId}`);
         const data = response.data;
 
         if (!data) {
